@@ -18,12 +18,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private JwtAuthEntryPoint authEntryPoint;
-    private CustomUserDetailsService userDetailsService;
+    private final JwtAuthEntryPoint authEntryPoint;
 
     @Autowired
-    public SecurityConfig(CustomUserDetailsService userDetailsService, JwtAuthEntryPoint authEntryPoint) {
-        this.userDetailsService = userDetailsService;
+    public SecurityConfig(JwtAuthEntryPoint authEntryPoint) {
         this.authEntryPoint = authEntryPoint;
     }
 
@@ -35,14 +33,18 @@ public class SecurityConfig {
                         .authenticationEntryPoint(authEntryPoint))
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeRequests()
-                .requestMatchers("api/auth/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .httpBasic(Customizer.withDefaults());
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .authorizeRequests(authorizeRequests -> authorizeRequests
+                        .requestMatchers("/login-page", "/api/auth/**", "/css/**", "/js/**", "/img/**", "/webjars/**", "/vendor/**").permitAll()
+                        .requestMatchers("/roles-page", "/users-page").hasAuthority("ADMIN")
+                        .requestMatchers("/category-page", "/customer-page", "/index", "/product-page", "/purchases-page", "/sales-page", "/supplier-page").hasAnyAuthority("USER", "ADMIN")
+                        .anyRequest().authenticated()
+                )
+                .httpBasic(Customizer.withDefaults())
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
+
 
     @Bean
     public AuthenticationManager authenticationManager(
@@ -56,7 +58,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public JWTAuthenticationFilter jwtAuthenticationFilter() {
-        return new JWTAuthenticationFilter();
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter();
     }
 }
