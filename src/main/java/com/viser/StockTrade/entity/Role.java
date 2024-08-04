@@ -1,4 +1,4 @@
-package com.viser.StockTrade.models;
+package com.viser.StockTrade.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -10,5 +10,6 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "name")
     private String name;
 }

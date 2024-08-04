@@ -11,6 +11,8 @@ import java.io.IOException;
 
 @Component
 public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
+
+    //TODO ukoliko je korisnik autentifikovan, a nema dozvole za pristup izbaciti mu poruku
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException {

@@ -1,64 +1,31 @@
 package com.viser.StockTrade.controller;
 
-import com.viser.StockTrade.dto.RegisterDto;
-import com.viser.StockTrade.models.Role;
-import com.viser.StockTrade.models.UserEntity;
-import com.viser.StockTrade.repository.RoleRepository;
-import com.viser.StockTrade.repository.UserRepository;
-import com.viser.StockTrade.security.JwtGenerator;
-import jakarta.servlet.http.Cookie;
+import com.viser.StockTrade.service.AuthService;
+import com.viser.StockTrade.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Collections;
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtGenerator jwtGenerator;
-
     @Autowired
-    public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository,
-                          RoleRepository roleRepository, PasswordEncoder passwordEncoder, JwtGenerator jwtGenerator) {
-        this.authenticationManager = authenticationManager;
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.jwtGenerator = jwtGenerator;
-    }
+    private AuthService authService;
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/login")
-    public String login(@RequestParam String username,
-                        @RequestParam String password,
-                        HttpServletResponse response,
-                        Model model) {
+    public String login(@RequestParam String username, @RequestParam String password, HttpServletResponse response, Model model) {
         try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(username, password));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            String token = jwtGenerator.generateToken(authentication);
-            Cookie cookie = new Cookie("jwtToken", token);
-            cookie.setHttpOnly(true);
-            cookie.setMaxAge(3600);
-            cookie.setPath("/");
-            response.addCookie(cookie);
-
+            authService.login(username, password, response);
             return "redirect:/index";
         } catch (Exception e) {
             model.addAttribute("error", "Invalid username or password.");
@@ -68,31 +35,18 @@ public class AuthController {
 
     @PostMapping("/logout")
     public String logout(HttpServletResponse response) {
-        Cookie cookie = new Cookie("jwtToken", null);
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(0);
-        cookie.setPath("/");
-        response.addCookie(cookie);
-
-        SecurityContextHolder.clearContext();
+        authService.logout(response);
         return "redirect:/login-page";
     }
 
-    @PostMapping("register")
-    public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
-        if (userRepository.existsByUsername(registerDto.getUsername())) {
-            return new ResponseEntity<>("Username is taken!", HttpStatus.BAD_REQUEST);
+    @PostMapping("/register")
+    public String register(@RequestParam String username, @RequestParam String password, Model model, RedirectAttributes ra) {
+        if (!userService.existByUsername(username)) {
+            authService.register(username, password);
+            ra.addFlashAttribute("success", "New user saved successfully.");
+            return "redirect:/users-page";
         }
-
-        UserEntity user = new UserEntity();
-        user.setUsername(registerDto.getUsername());
-        user.setPassword(passwordEncoder.encode((registerDto.getPassword())));
-
-        Role roles = roleRepository.findByName("USER").get();
-        user.setRoles(Collections.singletonList(roles));
-
-        userRepository.save(user);
-
-        return new ResponseEntity<>("User registered success!", HttpStatus.OK);
+        ra.addFlashAttribute("error", "Username is taken!");
+        return "redirect:/add-user-page";
     }
 }
