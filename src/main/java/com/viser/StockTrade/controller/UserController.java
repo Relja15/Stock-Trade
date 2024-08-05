@@ -34,7 +34,7 @@ public class UserController {
     }
 
     @PostMapping("edit/{id}")
-    public String showEditPage(@PathVariable("id") Integer id, String username, String password, RedirectAttributes ra){
+    public String editUser(@PathVariable("id") Integer id, String username, String password, RedirectAttributes ra){
         try {
             userService.edit(id, username, password);
             ra.addFlashAttribute("message", "User updated successfully.");

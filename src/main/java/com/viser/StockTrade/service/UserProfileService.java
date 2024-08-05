@@ -60,6 +60,9 @@ public class UserProfileService {
         userProfile.setDateOfBirth(userProfileDto.getDateOfBirth() != null ?  userProfileDto.getDateOfBirth() : userProfile.getDateOfBirth());
 
         if (userProfileDto.getProfilePicture() != null && !userProfileDto.getProfilePicture().isEmpty()) {
+            if(!userProfile.getProfilePictureUrl().isEmpty()){
+                fileService.deleteFile(userProfile.getProfilePictureUrl());
+            }
             String filename = user.getId() + "_" + userProfileDto.getProfilePicture().getOriginalFilename();
             fileService.uploadFile(userProfileDto.getProfilePicture(), filename);
             userProfile.setProfilePictureUrl("/uploads/" + filename);

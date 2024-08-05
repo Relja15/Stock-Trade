@@ -26,7 +26,7 @@ public class UserProfileController {
             return "redirect:/profile-page";
         } catch (Exception e) {
             ra.addFlashAttribute("errorMessage", "Error updating profile: " + e.getMessage());
-            return "redirect:/editProfile";
+            return "redirect:/edit-profile";
         }
     }
 }

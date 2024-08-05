@@ -40,7 +40,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestParam String username, @RequestParam String password, Model model, RedirectAttributes ra) {
+    public String register(@RequestParam String username, @RequestParam String password, RedirectAttributes ra) {
         if (!userService.existByUsername(username)) {
             authService.register(username, password);
             ra.addFlashAttribute("success", "New user saved successfully.");

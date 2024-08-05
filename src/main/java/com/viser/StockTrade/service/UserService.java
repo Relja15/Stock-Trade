@@ -25,7 +25,7 @@ public class UserService {
     @Autowired
     private FileService fileService;
 
-    public List<User> getAllUsers() {
+    public List<User> getAll() {
         return userRepository.findAll();
     }
 
@@ -76,8 +76,8 @@ public class UserService {
         if (user == null) {
             throw new UserNotFoundException("Could not find any user with ID " + id);
         }
-        user.setUsername(username);
-        user.setPassword(passwordEncoder.encode(password));
+        user.setUsername(!username.isEmpty() ? username : user.getUsername());
+        user.setPassword(!password.isEmpty() ? passwordEncoder.encode(password) : user.getPassword());
         userRepository.save(user);
     }
 }

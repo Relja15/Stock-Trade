@@ -3,6 +3,7 @@ package com.viser.StockTrade.controller;
 import com.viser.StockTrade.entity.User;
 import com.viser.StockTrade.entity.UserProfile;
 import com.viser.StockTrade.exceptions.UserNotFoundException;
+import com.viser.StockTrade.service.CategoryService;
 import com.viser.StockTrade.service.UserProfileService;
 import com.viser.StockTrade.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,9 @@ import java.security.Principal;
 @Controller
 public class ViewController {
     @Autowired
-    private UserProfileService userProfileService;
-    @Autowired
     private UserService userService;
+    @Autowired
+    private CategoryService categoryService;
 
     @GetMapping("/login-page")
     public String showLoginPage() {
@@ -36,6 +37,7 @@ public class ViewController {
     @GetMapping("/category-page")
     public  String showCategoryPage(Model model, Principal principal) {
         userService.getAllUsersDataInModel(model, principal.getName());
+        model.addAttribute("categories", categoryService.getAll());
         return  "category-page";
     }
 
@@ -80,7 +82,7 @@ public class ViewController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public String showUsersPage(Model model, Principal principal) {
         userService.getAllUsersDataInModel(model, principal.getName());
-        model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("users", userService.getAll());
         return "users-page";
     }
 
@@ -97,23 +99,32 @@ public class ViewController {
     }
 
     @GetMapping("/add-user-page")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String showAddUser(Model model, Principal principal){
         userService.getAllUsersDataInModel(model, principal.getName());
         return "add-user-page";
     }
 
     @GetMapping("/edit-user-page/{id}")
-    public String showEditPage(@PathVariable("id") Integer id, Model model, Principal principal, RedirectAttributes ra){
-        try {
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public String showEditUserPage(@PathVariable("id") Integer id, Model model, Principal principal) throws UserNotFoundException {
             userService.getAllUsersDataInModel(model, principal.getName());
             User user = userService.getById(id);
             model.addAttribute("user", user);
             model.addAttribute("pageTitle", "Edit User (ID: " + id + ")");
-
             return "edit-user-page";
-        } catch (UserNotFoundException e){
-            ra.addFlashAttribute("message", e.getMessage());
-            return "redirect:/users-page";
-        }
+    }
+
+    @GetMapping("/add-category-page")
+    public String showAddCategory(Model model, Principal principal){
+        userService.getAllUsersDataInModel(model, principal.getName());
+        return "add-category-page";
+    }
+
+    @GetMapping("/edit-category-page/{id}")
+    public String showEditCategoryPage(@PathVariable("id") Integer id, Model model, Principal principal){
+        userService.getAllUsersDataInModel(model, principal.getName());
+        model.addAttribute("category", categoryService.getById(id));
+        return "/edit-category-page";
     }
 }
