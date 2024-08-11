@@ -5,7 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class CategoryDto {
-    private MultipartFile categoryIcon;
+    private MultipartFile icon;
     private String name;
     private String description;
 }

@@ -2,7 +2,7 @@ package com.viser.StockTrade.service;
 
 import com.viser.StockTrade.entity.User;
 import com.viser.StockTrade.entity.UserProfile;
-import com.viser.StockTrade.exceptions.UserNotFoundException;
+import com.viser.StockTrade.exceptions.NotFoundException;
 import com.viser.StockTrade.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -29,12 +29,8 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User getById(int id) throws UserNotFoundException {
-        User user = userRepository.findById(id);
-        if(user != null) {
-            return userRepository.findById(id);
-        }
-        throw new UserNotFoundException("Could not found user with ID " + id);
+    public User getById(int id) {
+        return userRepository.findById(id);
     }
 
     public void getAllUsersDataInModel(Model model, String username) {
@@ -60,10 +56,10 @@ public class UserService {
         return userRepository.existsByUsername(username);
     }
 
-    public void delete(int id) throws UserNotFoundException, IOException {
+    public void delete(int id) throws NotFoundException, IOException {
         User user = userRepository.findById(id);
         if (user == null) {
-            throw new UserNotFoundException("Could not find any user with ID: " + id);
+            throw new NotFoundException("Could not find any user with ID: " + id);
         }
         UserProfile userProfile = userProfileService.getUserProfileByUserId(id);
         fileService.deleteFile(userProfile.getProfilePictureUrl());
@@ -71,10 +67,10 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public void edit(int id, String username, String password) throws UserNotFoundException {
+    public void edit(int id, String username, String password) throws NotFoundException {
         User user = userRepository.findById(id);
         if (user == null) {
-            throw new UserNotFoundException("Could not find any user with ID " + id);
+            throw new NotFoundException("Could not find any user with ID " + id);
         }
         user.setUsername(!username.isEmpty() ? username : user.getUsername());
         user.setPassword(!password.isEmpty() ? passwordEncoder.encode(password) : user.getPassword());

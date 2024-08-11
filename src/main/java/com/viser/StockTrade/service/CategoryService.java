@@ -3,7 +3,7 @@ package com.viser.StockTrade.service;
 import com.viser.StockTrade.dto.CategoryDto;
 import com.viser.StockTrade.entity.Category;
 import com.viser.StockTrade.entity.Product;
-import com.viser.StockTrade.exceptions.CategoryNotFoundException;
+import com.viser.StockTrade.exceptions.NotFoundException;
 import com.viser.StockTrade.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,12 +28,12 @@ public class CategoryService {
         return categoryRepository.findById(id);
     }
 
-    public boolean delete(int id) throws CategoryNotFoundException, IOException {
+    public boolean delete(int id) throws NotFoundException, IOException {
         Category category = categoryRepository.findById(id);
         if (category == null) {
-            throw new CategoryNotFoundException("Could not find any category with ID" + id);
+            throw new NotFoundException("Could not find any category with ID" + id);
         }
-        List<Product> products = productService.findProductsForCategory(id);
+        List<Product> products = productService.getProductsByCategoryId(id);
         if (products.isEmpty()) {
             fileService.deleteFile(category.getIcon());
             categoryRepository.delete(category);
@@ -48,33 +48,44 @@ public class CategoryService {
 
     public void add(CategoryDto categoryDto) throws IOException {
         Category category = new Category();
-        category.setName(categoryDto.getName());
-        category.setDescription(categoryDto.getDescription());
-
-        if (categoryDto.getCategoryIcon() != null && !categoryDto.getCategoryIcon().isEmpty()) {
-            String filename = categoryDto.getName() + "_" + categoryDto.getCategoryIcon().getOriginalFilename();
-            fileService.uploadFile(categoryDto.getCategoryIcon(), filename);
-            category.setIcon("/uploads/" + filename);
-        }
+        updateCategoryFields(category, categoryDto);
+        handleCategoryIcon(category, categoryDto);
 
         categoryRepository.save(category);
     }
 
-    public void edit(int id, CategoryDto categoryDto) throws CategoryNotFoundException, IOException {
-        Category category = categoryRepository.findById(id);
-        if (category == null) {
-            throw new CategoryNotFoundException("Category not found.");
-        }
-        category.setName(!categoryDto.getName().isEmpty() ? categoryDto.getName() : category.getName());
-        category.setDescription(!categoryDto.getDescription().isEmpty() ? categoryDto.getDescription() : category.getDescription());
-        if (categoryDto.getCategoryIcon() != null && !categoryDto.getCategoryIcon().isEmpty()) {
-            if (category.getIcon() != null && !category.getIcon().isEmpty()) {
-                fileService.deleteFile(category.getIcon());
-            }
-            String filename = categoryDto.getName() + "_" + categoryDto.getCategoryIcon().getOriginalFilename();
-            fileService.uploadFile(categoryDto.getCategoryIcon(), filename);
+    public void edit(int id, CategoryDto categoryDto) throws IOException {
+        Category category = findCategoryById(id);
+        updateCategoryFields(category, categoryDto);
+        handleCategoryIcon(category, categoryDto);
+        categoryRepository.save(category);
+    }
+
+    private Category findCategoryById(int id) {
+        return categoryRepository.findById(id);
+    }
+
+    private void updateCategoryFields(Category category, CategoryDto categoryDto) {
+        category.setName(getNonEmptyValue(categoryDto.getName(), category.getName()));
+        category.setDescription(getNonEmptyValue(categoryDto.getDescription(), category.getDescription()));
+    }
+
+    private void handleCategoryIcon(Category category, CategoryDto categoryDto) throws IOException {
+        if (categoryDto.getIcon() != null && !categoryDto.getIcon().isEmpty()) {
+            deleteOldIconIfNecessary(category);
+            String filename = categoryDto.getName() + "_" + categoryDto.getIcon().getOriginalFilename();
+            fileService.uploadFile(categoryDto.getIcon(), filename);
             category.setIcon("/uploads/" + filename);
         }
-        categoryRepository.save(category);
+    }
+
+    private void deleteOldIconIfNecessary(Category category) throws IOException {
+        if (category.getIcon() != null && !category.getIcon().isEmpty()) {
+            fileService.deleteFile(category.getIcon());
+        }
+    }
+
+    private String getNonEmptyValue(String newValue, String oldValue) {
+        return (newValue != null && !newValue.isEmpty()) ? newValue : oldValue;
     }
 }

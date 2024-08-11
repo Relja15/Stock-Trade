@@ -1,10 +1,8 @@
 package com.viser.StockTrade.controller;
 
 import com.viser.StockTrade.entity.User;
-import com.viser.StockTrade.entity.UserProfile;
-import com.viser.StockTrade.exceptions.UserNotFoundException;
 import com.viser.StockTrade.service.CategoryService;
-import com.viser.StockTrade.service.UserProfileService;
+import com.viser.StockTrade.service.SupplierService;
 import com.viser.StockTrade.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 
@@ -22,6 +19,8 @@ public class ViewController {
     private UserService userService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private SupplierService supplierService;
 
     @GetMapping("/login-page")
     public String showLoginPage() {
@@ -68,6 +67,7 @@ public class ViewController {
     @GetMapping("/supplier-page")
     public String showSupplierPage(Model model, Principal principal) {
         userService.getAllUsersDataInModel(model, principal.getName());
+        model.addAttribute("suppliers", supplierService.getAll());
         return "supplier-page";
     }
 
@@ -107,7 +107,7 @@ public class ViewController {
 
     @GetMapping("/edit-user-page/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public String showEditUserPage(@PathVariable("id") Integer id, Model model, Principal principal) throws UserNotFoundException {
+    public String showEditUserPage(@PathVariable("id") Integer id, Model model, Principal principal) {
             userService.getAllUsersDataInModel(model, principal.getName());
             User user = userService.getById(id);
             model.addAttribute("user", user);
@@ -126,5 +126,18 @@ public class ViewController {
         userService.getAllUsersDataInModel(model, principal.getName());
         model.addAttribute("category", categoryService.getById(id));
         return "/edit-category-page";
+    }
+
+    @GetMapping("/add-supplier-page")
+    public String showAddSupplier(Model model, Principal principal){
+        userService.getAllUsersDataInModel(model, principal.getName());
+        return "add-supplier-page";
+    }
+
+    @GetMapping("/edit-supplier-page/{id}")
+    public String showEditSupplierCategory(@PathVariable("id") Integer id, Model model, Principal principal){
+        userService.getAllUsersDataInModel(model, principal.getName());
+        model.addAttribute("supplier", supplierService.getById(id));
+        return "edit-supplier-page";
     }
 }

@@ -1,7 +1,7 @@
 package com.viser.StockTrade.controller;
 
 import com.viser.StockTrade.dto.CategoryDto;
-import com.viser.StockTrade.exceptions.CategoryNotFoundException;
+import com.viser.StockTrade.exceptions.NotFoundException;
 import com.viser.StockTrade.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,13 +22,14 @@ public class CategoryController {
             categoryService.add(categoryDto);
             ra.addFlashAttribute("success", "Category saved successfully.");
             return "redirect:/category-page";
+        } else {
+            ra.addFlashAttribute("error", "A category with this name already exists. Please choose a different name.");
+            return "redirect:/add-category-page";
         }
-        ra.addFlashAttribute("error", "A category with this name already exists. Please choose a different name.");
-        return "redirect:/add-category-page";
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") Integer id, RedirectAttributes ra) throws CategoryNotFoundException, IOException {
+    public String delete(@PathVariable("id") Integer id, RedirectAttributes ra) throws NotFoundException, IOException {
         boolean isDelete = categoryService.delete(id);
         if(isDelete){
             ra.addFlashAttribute("message", "The category with id " + id + " has been deleted.");
@@ -39,7 +40,7 @@ public class CategoryController {
     }
 
     @PostMapping("/edit/{id}")
-    private String edit(@PathVariable("id") Integer id, @ModelAttribute CategoryDto categoryDto, RedirectAttributes ra) throws CategoryNotFoundException, IOException {
+    private String edit(@PathVariable("id") Integer id, @ModelAttribute CategoryDto categoryDto, RedirectAttributes ra) throws NotFoundException, IOException {
         try {
             categoryService.edit(id, categoryDto);
             ra.addFlashAttribute("message", "Category update successfully!");

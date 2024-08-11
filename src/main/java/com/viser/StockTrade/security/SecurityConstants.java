@@ -33,6 +33,13 @@ public class SecurityConstants {
             "/supplier-page",
             "/profile-page",
             "/edit-profile",
-            "/uploads/**"
+            "/uploads/**",
+            "/add-category-page",
+            "/edit-category-page",
+            "/api/category/**",
+            "/add-supplier-page",
+            "/edit-supplier-page",
+            "/api/supplier/**"
+
     };
 }

@@ -16,7 +16,11 @@ public class ProductService {
         return  productRepository.findAll();
     }
 
-    public List<Product> findProductsForCategory(int categoryId){
+    public List<Product> getProductsByCategoryId(int categoryId){
         return productRepository.findAllByCategoryId(categoryId);
+    }
+
+    public List<Product> getProductsBySupplierId(int supplierId){
+        return productRepository.findAllBySupplierId(supplierId);
     }
 }
