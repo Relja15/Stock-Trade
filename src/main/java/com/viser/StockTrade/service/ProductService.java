@@ -12,15 +12,19 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    public List<Product> getAll(){
-        return  productRepository.findAll();
+    public List<Product> getAll() {
+        return productRepository.findAll();
     }
 
-    public List<Product> getProductsByCategoryId(int categoryId){
+    public List<Product> getProductsByCategoryId(int categoryId) {
         return productRepository.findAllByCategoryId(categoryId);
     }
 
-    public List<Product> getProductsBySupplierId(int supplierId){
-        return productRepository.findAllBySupplierId(supplierId);
+    public boolean existByCategoryId(int id) {
+        return productRepository.existsByCategoryId(id);
+    }
+
+    public boolean existBySupplierId(int id) {
+        return productRepository.existsBySupplierId(id);
     }
 }

@@ -193,8 +193,8 @@
                         <div th:if="${success != null}" class="alert alert-success" role="alert">
                             <p th:text="${success}"></p>
                         </div>
-                        <div th:if="${message != null}" class="alert alert-success" role="alert">
-                            <p th:text="${message}"></p>
+                        <div th:if="${error != null}" class="alert alert-danger" role="alert">
+                            <p th:text="${error}"></p>
                         </div>
                         <button type="button" class="btn btn-outline-primary data-btn">
                             <a th:href="@{/add-category-page}">Add Category</a>
@@ -220,7 +220,8 @@
                                     <!-- Edit Button -->
                                     <a th:href="@{/edit-category-page/{id}(id=${category.getId()})}" class="btn btn-outline-primary data-btn" role="button">Edit</a>
                                     <!-- Delete Button -->
-                                    <form th:action="@{/api/category/delete/{id}(id=${category.id})}" method="get" style="display:inline;">
+                                    <form th:action="@{/api/category/delete/{id}(id=${category.id})}" method="post" style="display:inline;">
+                                        <input type="hidden" name="_method" value="delete"/>
                                         <button type="submit" class="btn btn-outline-primary data-btn" onclick="return confirm('Are you sure you want to delete this category?');">Delete</button>
                                     </form>
                                 </td>

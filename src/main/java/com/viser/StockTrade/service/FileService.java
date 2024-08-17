@@ -2,6 +2,7 @@ package com.viser.StockTrade.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,7 +25,7 @@ public class FileService {
 
     public void deleteFile(String path) throws IOException {
         Path filePath = Paths.get(UPLOAD_DIR, path.split("uploads/")[1]);
-        if(Files.exists(filePath)){
+        if (Files.exists(filePath)) {
             Files.delete(filePath);
         }
     }

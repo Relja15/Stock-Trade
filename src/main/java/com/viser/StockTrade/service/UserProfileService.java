@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 
 @Service
@@ -20,20 +21,20 @@ public class UserProfileService {
     @Autowired
     private FileService fileService;
 
-    public void save(UserProfile userProfile){
+    public void save(UserProfile userProfile) {
         userProfileRepository.save(userProfile);
     }
 
-    public UserProfile getUserProfileByUsername(String username){
+    public UserProfile getUserProfileByUsername(String username) {
         User user = userService.getByUsername(username);
-        if(user != null){
+        if (user != null) {
             return userProfileRepository.findByUserId(user.getId());
         }
         return null;
     }
 
 
-    public void delete(UserProfile userProfile){
+    public void delete(UserProfile userProfile) {
         userProfileRepository.delete(userProfile);
     }
 

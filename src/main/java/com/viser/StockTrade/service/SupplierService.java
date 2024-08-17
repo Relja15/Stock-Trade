@@ -5,6 +5,8 @@ import com.viser.StockTrade.dto.SupplierDto;
 import com.viser.StockTrade.entity.Category;
 import com.viser.StockTrade.entity.Product;
 import com.viser.StockTrade.entity.Supplier;
+import com.viser.StockTrade.exceptions.ForeignKeyConstraintViolationException;
+import com.viser.StockTrade.exceptions.NameExistException;
 import com.viser.StockTrade.exceptions.NotFoundException;
 import com.viser.StockTrade.repository.SupplierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,23 +31,27 @@ public class SupplierService {
         return supplierRepository.existsByName(name);
     }
 
-    public void add(SupplierDto supplierDto){
+    public boolean existById(int id){
+        return supplierRepository.existsById(id);
+    }
+
+    public void add(SupplierDto supplierDto) throws NameExistException {
+        if(existByName(supplierDto.getName())){
+            throw new NameExistException("A supplier with this name already exists. Please choose a different name.");
+        }
         Supplier supplier = new Supplier();
         updateSupplierFields(supplier, supplierDto);
         supplierRepository.save(supplier);
     }
 
-    public boolean delete(int id) throws NotFoundException {
-        Supplier supplier = supplierRepository.findById(id);
-        if(supplier == null){
-            throw new NotFoundException("Could not find any supplier with ID" + id);
+    public void delete(int id) throws NotFoundException, ForeignKeyConstraintViolationException {
+        if(!existById(id)){
+            throw new NotFoundException("Could not find any supplier with ID " + id);
         }
-        List<Product> products = productService.getProductsBySupplierId(id);
-        if(products.isEmpty()){
-            supplierRepository.delete(supplier);
-            return true;
+        if(productService.existBySupplierId(id)){
+            throw new ForeignKeyConstraintViolationException("The supplier cannot be deleted because it has associated products.");
         }
-        return false;
+        supplierRepository.deleteById(id);
     }
 
     public void edit(int id, SupplierDto supplierDto) throws NotFoundException {

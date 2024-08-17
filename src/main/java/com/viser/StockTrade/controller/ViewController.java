@@ -28,22 +28,22 @@ public class ViewController {
     }
 
     @GetMapping("/index")
-    public  String showIndexPage(Model model, Principal principal) {
+    public String showIndexPage(Model model, Principal principal) {
         userService.getAllUsersDataInModel(model, principal.getName());
         return "index";
     }
 
     @GetMapping("/category-page")
-    public  String showCategoryPage(Model model, Principal principal) {
+    public String showCategoryPage(Model model, Principal principal) {
         userService.getAllUsersDataInModel(model, principal.getName());
         model.addAttribute("categories", categoryService.getAll());
-        return  "category-page";
+        return "category-page";
     }
 
     @GetMapping("/product-page")
-    public  String showProductPage(Model model, Principal principal) {
+    public String showProductPage(Model model, Principal principal) {
         userService.getAllUsersDataInModel(model, principal.getName());
-        return  "product-page";
+        return "product-page";
     }
 
     @GetMapping("/customer-page")
@@ -100,7 +100,7 @@ public class ViewController {
 
     @GetMapping("/add-user-page")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public String showAddUser(Model model, Principal principal){
+    public String showAddUser(Model model, Principal principal) {
         userService.getAllUsersDataInModel(model, principal.getName());
         return "add-user-page";
     }
@@ -108,34 +108,34 @@ public class ViewController {
     @GetMapping("/edit-user-page/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public String showEditUserPage(@PathVariable("id") Integer id, Model model, Principal principal) {
-            userService.getAllUsersDataInModel(model, principal.getName());
-            User user = userService.getById(id);
-            model.addAttribute("user", user);
-            model.addAttribute("pageTitle", "Edit User (ID: " + id + ")");
-            return "edit-user-page";
+        userService.getAllUsersDataInModel(model, principal.getName());
+        User user = userService.getById(id);
+        model.addAttribute("user", user);
+        model.addAttribute("pageTitle", "Edit User (ID: " + id + ")");
+        return "edit-user-page";
     }
 
     @GetMapping("/add-category-page")
-    public String showAddCategory(Model model, Principal principal){
+    public String showAddCategory(Model model, Principal principal) {
         userService.getAllUsersDataInModel(model, principal.getName());
         return "add-category-page";
     }
 
     @GetMapping("/edit-category-page/{id}")
-    public String showEditCategoryPage(@PathVariable("id") Integer id, Model model, Principal principal){
+    public String showEditCategoryPage(@PathVariable("id") Integer id, Model model, Principal principal) {
         userService.getAllUsersDataInModel(model, principal.getName());
         model.addAttribute("category", categoryService.getById(id));
         return "/edit-category-page";
     }
 
     @GetMapping("/add-supplier-page")
-    public String showAddSupplier(Model model, Principal principal){
+    public String showAddSupplier(Model model, Principal principal) {
         userService.getAllUsersDataInModel(model, principal.getName());
         return "add-supplier-page";
     }
 
     @GetMapping("/edit-supplier-page/{id}")
-    public String showEditSupplierCategory(@PathVariable("id") Integer id, Model model, Principal principal){
+    public String showEditSupplierCategory(@PathVariable("id") Integer id, Model model, Principal principal) {
         userService.getAllUsersDataInModel(model, principal.getName());
         model.addAttribute("supplier", supplierService.getById(id));
         return "edit-supplier-page";

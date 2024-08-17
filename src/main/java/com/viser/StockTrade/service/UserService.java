@@ -1,5 +1,6 @@
 package com.viser.StockTrade.service;
 
+import com.viser.StockTrade.dto.UserDto;
 import com.viser.StockTrade.entity.User;
 import com.viser.StockTrade.entity.UserProfile;
 import com.viser.StockTrade.exceptions.NotFoundException;
@@ -33,17 +34,6 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public void getAllUsersDataInModel(Model model, String username) {
-        User user = userRepository.findByUsername(username);
-        if (user != null) {
-            UserProfile userProfile = userProfileService.getUserProfileByUserId(user.getId());
-            model.addAttribute("userProfile", userProfile);
-            model.addAttribute("username", user.getUsername());
-        } else {
-            model.addAttribute("errorMessage", "User not found");
-        }
-    }
-
     public void save(User user) {
         userRepository.save(user);
     }
@@ -56,24 +46,44 @@ public class UserService {
         return userRepository.existsByUsername(username);
     }
 
+    public void getAllUsersDataInModel(Model model, String username) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            UserProfile userProfile = userProfileService.getUserProfileByUserId(user.getId());
+            model.addAttribute("userProfile", userProfile);
+            model.addAttribute("username", user.getUsername());
+        } else {
+            model.addAttribute("errorMessage", "User not found");
+        }
+    }
+
     public void delete(int id) throws NotFoundException, IOException {
-        User user = userRepository.findById(id);
-        if (user == null) {
-            throw new NotFoundException("Could not find any user with ID: " + id);
+        if (!userRepository.existsById(id)) {
+            throw new NotFoundException("Could not find any user with ID " + id);
         }
         UserProfile userProfile = userProfileService.getUserProfileByUserId(id);
-        fileService.deleteFile(userProfile.getProfilePictureUrl());
-        user.getRoles().clear();
+        if (userProfile.getProfilePictureUrl() != null) {
+            fileService.deleteFile(userProfile.getProfilePictureUrl());
+        }
+        userRepository.findById(id).getRoles().clear();
         userRepository.deleteById(id);
     }
 
-    public void edit(int id, String username, String password) throws NotFoundException {
+    public void edit(int id, UserDto userDto) throws NotFoundException {
         User user = userRepository.findById(id);
         if (user == null) {
             throw new NotFoundException("Could not find any user with ID " + id);
         }
-        user.setUsername(!username.isEmpty() ? username : user.getUsername());
-        user.setPassword(!password.isEmpty() ? passwordEncoder.encode(password) : user.getPassword());
+        updateUserFields(user, userDto);
         userRepository.save(user);
+    }
+
+    private void updateUserFields(User user, UserDto userDto) {
+        user.setUsername(getNonEmptyValue(userDto.getUsername(), user.getUsername()));
+        user.setPassword(passwordEncoder.encode(getNonEmptyValue(userDto.getPassword(), user.getPassword())));
+    }
+
+    private String getNonEmptyValue(String newValue, String oldValue) {
+        return (newValue != null && !newValue.isEmpty()) ? newValue : oldValue;
     }
 }

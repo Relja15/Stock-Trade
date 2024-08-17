@@ -2,7 +2,8 @@ package com.viser.StockTrade.service;
 
 import com.viser.StockTrade.dto.CategoryDto;
 import com.viser.StockTrade.entity.Category;
-import com.viser.StockTrade.entity.Product;
+import com.viser.StockTrade.exceptions.ForeignKeyConstraintViolationException;
+import com.viser.StockTrade.exceptions.NameExistException;
 import com.viser.StockTrade.exceptions.NotFoundException;
 import com.viser.StockTrade.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,34 +29,40 @@ public class CategoryService {
         return categoryRepository.findById(id);
     }
 
-    public boolean delete(int id) throws NotFoundException, IOException {
-        Category category = categoryRepository.findById(id);
-        if (category == null) {
-            throw new NotFoundException("Could not find any category with ID" + id);
-        }
-        List<Product> products = productService.getProductsByCategoryId(id);
-        if (products.isEmpty()) {
-            fileService.deleteFile(category.getIcon());
-            categoryRepository.delete(category);
-            return true;
-        }
-        return false;
-    }
-
     public boolean existByName(String name) {
         return categoryRepository.existsByName(name);
     }
 
-    public void add(CategoryDto categoryDto) throws IOException {
+    public boolean existById(int id) {
+        return categoryRepository.existsById(id);
+    }
+
+    public void add(CategoryDto categoryDto) throws NameExistException, IOException {
+        if (existByName(categoryDto.getName())) {
+            throw new NameExistException("A category with this name already exists. Please choose a different name.");
+        }
         Category category = new Category();
         updateCategoryFields(category, categoryDto);
         handleCategoryIcon(category, categoryDto);
-
         categoryRepository.save(category);
     }
 
-    public void edit(int id, CategoryDto categoryDto) throws IOException {
+    public void delete(int id) throws NotFoundException, ForeignKeyConstraintViolationException, IOException {
+        if (!existById(id)) {
+            throw new NotFoundException("Could not find any category with ID " + id);
+        }
+        if (productService.existByCategoryId(id)) {
+            throw new ForeignKeyConstraintViolationException("The category cannot be deleted because it has associated products.");
+        }
+        fileService.deleteFile(getById(id).getIcon());
+        categoryRepository.deleteById(id);
+    }
+
+    public void edit(int id, CategoryDto categoryDto) throws NotFoundException, IOException {
         Category category = findCategoryById(id);
+        if (category == null) {
+            throw new NotFoundException("Could not find any category with ID" + id);
+        }
         updateCategoryFields(category, categoryDto);
         handleCategoryIcon(category, categoryDto);
         categoryRepository.save(category);
