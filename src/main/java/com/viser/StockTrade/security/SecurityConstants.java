@@ -1,7 +1,7 @@
 package com.viser.StockTrade.security;
 
 public class SecurityConstants {
-    public static final long jwtExpiration = 1200000;
+    public static final long jwtExpiration = 900000;
 
     public static final String[] authWhiteList = {
             "/login-page",
@@ -39,7 +39,10 @@ public class SecurityConstants {
             "/api/category/**",
             "/add-supplier-page",
             "/edit-supplier-page",
-            "/api/supplier/**"
-
+            "/api/supplier/**",
+            "/add-product-page",
+            "/edit-product-page",
+            "/add-customer-page",
+            "/edit-customer-page"
     };
 }

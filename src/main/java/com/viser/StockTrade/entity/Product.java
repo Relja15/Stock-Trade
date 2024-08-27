@@ -18,7 +18,7 @@ public class Product {
     @Column(name = "stock_quantity")
     private int stockQuantity;
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     Category category;
     @ManyToOne
     @JoinColumn(name = "supplier_id", nullable = false)

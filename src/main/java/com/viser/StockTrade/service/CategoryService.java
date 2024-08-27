@@ -2,24 +2,21 @@ package com.viser.StockTrade.service;
 
 import com.viser.StockTrade.dto.CategoryDto;
 import com.viser.StockTrade.entity.Category;
-import com.viser.StockTrade.exceptions.ForeignKeyConstraintViolationException;
-import com.viser.StockTrade.exceptions.NameExistException;
-import com.viser.StockTrade.exceptions.NotFoundException;
+import com.viser.StockTrade.exceptions.*;
 import com.viser.StockTrade.repository.CategoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 
 import java.io.IOException;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CategoryService {
-    @Autowired
-    private CategoryRepository categoryRepository;
-    @Autowired
-    private ProductService productService;
-    @Autowired
-    private FileService fileService;
+    private final CategoryRepository categoryRepository;
+    private final ProductService productService;
+    private final FileService fileService;
 
     public List<Category> getAll() {
         return categoryRepository.findAll();
@@ -37,9 +34,10 @@ public class CategoryService {
         return categoryRepository.existsById(id);
     }
 
-    public void add(CategoryDto categoryDto) throws NameExistException, IOException {
+    public void add(CategoryDto categoryDto, BindingResult result) throws ValidationException, NameExistException, IOException {
+        ExceptionHelper.throwValidationException(result, "/add-category-page");
         if (existByName(categoryDto.getName())) {
-            throw new NameExistException("A category with this name already exists. Please choose a different name.");
+            throw new NameExistException("A category with this name already exists. Please choose a different name.", "/add-category-page");
         }
         Category category = new Category();
         updateCategoryFields(category, categoryDto);
@@ -49,19 +47,23 @@ public class CategoryService {
 
     public void delete(int id) throws NotFoundException, ForeignKeyConstraintViolationException, IOException {
         if (!existById(id)) {
-            throw new NotFoundException("Could not find any category with ID " + id);
+            throw new NotFoundException("Could not find any category with ID " + id, "/category-page");
         }
         if (productService.existByCategoryId(id)) {
-            throw new ForeignKeyConstraintViolationException("The category cannot be deleted because it has associated products.");
+            throw new ForeignKeyConstraintViolationException("The category cannot be deleted because it has associated products.", "/category-page");
         }
         fileService.deleteFile(getById(id).getIcon());
         categoryRepository.deleteById(id);
     }
 
-    public void edit(int id, CategoryDto categoryDto) throws NotFoundException, IOException {
+    public void edit(int id, CategoryDto categoryDto, BindingResult result) throws ValidationException, NotFoundException, NameExistException, IOException {
+        ExceptionHelper.throwValidationException(result, "/edit-category-page/" + id);
         Category category = findCategoryById(id);
         if (category == null) {
-            throw new NotFoundException("Could not find any category with ID" + id);
+            throw new NotFoundException("Could not find any category with ID" + id, "/edit-category-page/" + id);
+        }
+        if (category.getName().equals(categoryDto.getName()) && existByName(categoryDto.getName())) {
+            throw new NameExistException("A category with this name already exists. Please choose a different name.", "/edit-category-page/" + id);
         }
         updateCategoryFields(category, categoryDto);
         handleCategoryIcon(category, categoryDto);

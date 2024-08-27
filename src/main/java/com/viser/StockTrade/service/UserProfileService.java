@@ -3,23 +3,27 @@ package com.viser.StockTrade.service;
 import com.viser.StockTrade.dto.UserProfileDto;
 import com.viser.StockTrade.entity.User;
 import com.viser.StockTrade.entity.UserProfile;
+import com.viser.StockTrade.exceptions.ExceptionHelper;
+import com.viser.StockTrade.exceptions.NotFoundException;
+import com.viser.StockTrade.exceptions.ValidationException;
 import com.viser.StockTrade.repository.UserProfileRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 
 import java.io.IOException;
 
 @Service
+@RequiredArgsConstructor
 public class UserProfileService {
-    @Autowired
-    private UserProfileRepository userProfileRepository;
-    @Autowired
+    private final UserProfileRepository userProfileRepository;
     @Lazy
-    private UserService userService;
     @Autowired
-    private FileService fileService;
+    private UserService userService;
+    private final FileService fileService;
 
     public void save(UserProfile userProfile) {
         userProfileRepository.save(userProfile);
@@ -38,10 +42,10 @@ public class UserProfileService {
         userProfileRepository.delete(userProfile);
     }
 
-    public void updateUserProfile(UserProfileDto userProfileDto, String username) throws IOException {
+    public void updateUserProfile(UserProfileDto userProfileDto, String username, BindingResult result) throws ValidationException, IOException {
+        ExceptionHelper.throwValidationException(result, "/edit-profile");
         User user = getUserByUsername(username);
         UserProfile userProfile = getUserProfileByUserId(user.getId());
-
         updateUserProfileFields(userProfileDto, userProfile);
         handleProfilePicture(userProfileDto, userProfile, user.getId());
 
@@ -57,11 +61,7 @@ public class UserProfileService {
     }
 
     public UserProfile getUserProfileByUserId(int userId) {
-        UserProfile userProfile = userProfileRepository.findByUserId(userId);
-        if (userProfile == null) {
-            throw new RuntimeException("User not found");
-        }
-        return userProfile;
+        return userProfileRepository.findByUserId(userId);
     }
 
     private void updateUserProfileFields(UserProfileDto userProfileDto, UserProfile userProfile) {
@@ -78,7 +78,7 @@ public class UserProfileService {
 
     private void handleProfilePicture(UserProfileDto userProfileDto, UserProfile userProfile, int userId) throws IOException {
         if (userProfileDto.getProfilePicture() != null && !userProfileDto.getProfilePicture().isEmpty()) {
-            if (!userProfile.getProfilePictureUrl().isEmpty()) {
+            if (userProfile.getProfilePictureUrl() != null && !userProfile.getProfilePictureUrl().isEmpty()) {
                 fileService.deleteFile(userProfile.getProfilePictureUrl());
             }
             String filename = userId + "_" + userProfileDto.getProfilePicture().getOriginalFilename();

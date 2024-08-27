@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class SupplierDto {
+public class CustomerDto {
     @BasicValidation(message = "Name must be at least {minLength} characters long and cannot be just spaces.")
     private String name;
     @BasicValidation(minLength = 5, message = "Address must be at least {minLength} characters long and cannot be just spaces.")

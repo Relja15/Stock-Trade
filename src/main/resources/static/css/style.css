@@ -1218,10 +1218,10 @@ h6 {
 
 .data-btn {
     color: #4154f1;;
-    margin: 10px; /* Margina od 10 piksela */
-    padding: 5px 10px; /* Dodatno postavljanje unutrašnjeg prostora dugmeta */
+    margin: 10px;
+    padding: 5px 10px;
     border-color: #4154f1;;
-    border-radius: 5px; /* Zaobljeni ivici dugmeta */
+    border-radius: 5px;
     float: right;
 }
 
@@ -1237,7 +1237,7 @@ h6 {
 }
 
 .action-buttons {
-    display: flex;
-    gap: 5px;
-    align-items: center;
+    display: flex; /* Aktivira flexbox */
+    justify-content: flex-end; /* Poravnava sadržaj na desnu stranu */
+    gap: 8px; /* Dodaje razmak između dugmadi */
 }

@@ -187,8 +187,8 @@
 
     <div class="container mt-5">
         <form th:action="@{/api/supplier/edit/{id}(id=${supplier.id})}" method="post">
-            <div th:if="${message != null}" class="alert alert-danger" role="alert">
-                <p th:text="${message}"></p>
+            <div th:if="${error != null}" class="alert alert-danger" role="alert">
+                <p th:text="${error}"></p>
             </div>
             <div class="mb-3">
                 <label for="name" class="form-label">Name:</label>

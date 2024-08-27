@@ -186,8 +186,8 @@
 
     <div class="container mt-5">
         <form action="/api/user-profile/update" method="post" enctype="multipart/form-data">
-            <div th:if="${errorMessage != null}" class="alert alert-danger" role="alert">
-                <p th:text="${errorMessage}"></p>
+            <div th:if="${error != null}" class="alert alert-danger" role="alert">
+                <p th:text="${error}"></p>
             </div>
             <div class="mb-3">
                 <label for="profilePicture" class="form-label">Profile Picture:</label>

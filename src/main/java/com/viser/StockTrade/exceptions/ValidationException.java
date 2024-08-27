@@ -3,10 +3,10 @@ package com.viser.StockTrade.exceptions;
 import lombok.Getter;
 
 @Getter
-public class NameExistException extends Throwable {
+public class ValidationException extends Throwable{
     private final String redirectUrl;
 
-    public NameExistException(String message, String redirectUrl) {
+    public ValidationException(String message, String redirectUrl) {
         super(message);
         this.redirectUrl = redirectUrl;
     }

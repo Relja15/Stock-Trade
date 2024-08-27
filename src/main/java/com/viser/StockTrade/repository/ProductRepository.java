@@ -8,9 +8,8 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
-    List<Product> findAllByCategoryId(int categoryId);
-
-    List<Product> findAllBySupplierId(int supplierId);
+    Product findById(int id);
+    boolean existsByName(String name);
 
     boolean existsByCategoryId(int id);
 

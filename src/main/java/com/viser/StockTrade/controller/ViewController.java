@@ -1,10 +1,7 @@
 package com.viser.StockTrade.controller;
 
-import com.viser.StockTrade.entity.User;
-import com.viser.StockTrade.service.CategoryService;
-import com.viser.StockTrade.service.SupplierService;
-import com.viser.StockTrade.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.viser.StockTrade.service.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,13 +11,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.security.Principal;
 
 @Controller
+@RequiredArgsConstructor
 public class ViewController {
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private CategoryService categoryService;
-    @Autowired
-    private SupplierService supplierService;
+    private final UserService userService;
+    private final CategoryService categoryService;
+    private final SupplierService supplierService;
+    private final ProductService productService;
+    private final CustomerService customerService;
 
     @GetMapping("/login-page")
     public String showLoginPage() {
@@ -43,12 +40,14 @@ public class ViewController {
     @GetMapping("/product-page")
     public String showProductPage(Model model, Principal principal) {
         userService.getAllUsersDataInModel(model, principal.getName());
+        model.addAttribute("products", productService.getAll());
         return "product-page";
     }
 
     @GetMapping("/customer-page")
     public String showCustomerPage(Model model, Principal principal) {
         userService.getAllUsersDataInModel(model, principal.getName());
+        model.addAttribute("customers", customerService.getAll());
         return "customer-page";
     }
 
@@ -109,8 +108,7 @@ public class ViewController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public String showEditUserPage(@PathVariable("id") Integer id, Model model, Principal principal) {
         userService.getAllUsersDataInModel(model, principal.getName());
-        User user = userService.getById(id);
-        model.addAttribute("user", user);
+        model.addAttribute("user", userService.getById(id));
         model.addAttribute("pageTitle", "Edit User (ID: " + id + ")");
         return "edit-user-page";
     }
@@ -139,5 +137,35 @@ public class ViewController {
         userService.getAllUsersDataInModel(model, principal.getName());
         model.addAttribute("supplier", supplierService.getById(id));
         return "edit-supplier-page";
+    }
+
+    @GetMapping("/add-product-page")
+    public String showAddProductPage(Model model, Principal principal) {
+        userService.getAllUsersDataInModel(model, principal.getName());
+        model.addAttribute("categories", categoryService.getAll());
+        model.addAttribute("suppliers", supplierService.getAll());
+        return "add-product-page";
+    }
+
+    @GetMapping("/edit-product-page/{id}")
+    public String showEditProductPage(@PathVariable("id") Integer id, Model model, Principal principal) {
+        userService.getAllUsersDataInModel(model, principal.getName());
+        model.addAttribute("categories", categoryService.getAll());
+        model.addAttribute("suppliers", supplierService.getAll());
+        model.addAttribute("product", productService.getById(id));
+        return "edit-product-page";
+    }
+
+    @GetMapping("/add-customer-page")
+    public String showAddCustomerPage(Model model, Principal principal) {
+        userService.getAllUsersDataInModel(model, principal.getName());
+        return "add-customer-page";
+    }
+
+    @GetMapping("/edit-customer-page/{id}")
+    public String showEditCustomerPage(@PathVariable("id") Integer id, Model model, Principal principal) {
+        userService.getAllUsersDataInModel(model, principal.getName());
+        model.addAttribute("customer", customerService.getById(id));
+        return "edit-customer-page";
     }
 }
