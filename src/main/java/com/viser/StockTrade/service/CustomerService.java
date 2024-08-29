@@ -1,16 +1,13 @@
 package com.viser.StockTrade.service;
 
 import com.viser.StockTrade.dto.CustomerDto;
-import com.viser.StockTrade.dto.SupplierDto;
 import com.viser.StockTrade.entity.Customer;
-import com.viser.StockTrade.entity.Supplier;
 import com.viser.StockTrade.exceptions.ExceptionHelper;
 import com.viser.StockTrade.exceptions.NameExistException;
 import com.viser.StockTrade.exceptions.NotFoundException;
 import com.viser.StockTrade.exceptions.ValidationException;
 import com.viser.StockTrade.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
@@ -19,22 +16,22 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CustomerService {
-    private final CustomerRepository customerRepository;
+    private final CustomerRepository repo;
 
     public List<Customer> getAll(){
-        return customerRepository.findAll();
+        return repo.findAll();
     }
 
     public Customer getById(int id){
-        return customerRepository.findById(id);
+        return repo.findById(id);
     }
 
     public boolean existByName(String name){
-        return customerRepository.existsByName(name);
+        return repo.existsByName(name);
     }
 
     public boolean existById(int id){
-        return customerRepository.existsById(id);
+        return repo.existsById(id);
     }
 
     public void add(CustomerDto customerDto, BindingResult result) throws ValidationException, NameExistException {
@@ -44,14 +41,14 @@ public class CustomerService {
         }
         Customer customer = new Customer();
         updateSupplierFields(customer, customerDto);
-        customerRepository.save(customer);
+        repo.save(customer);
     }
 
     public void delete(int id) throws NotFoundException {
         if(!existById(id)){
             throw new NotFoundException("Could not find any customer with ID " + id, "/customer-page");
         }
-        customerRepository.deleteById(id);
+        repo.deleteById(id);
     }
 
     public void edit(int id, CustomerDto customerDto, BindingResult result) throws ValidationException, NotFoundException, NameExistException{
@@ -64,7 +61,7 @@ public class CustomerService {
             throw new NameExistException("A customer with this name already exists. Please choose a different name.", "/edit-customer-page/" + id);
         }
         updateSupplierFields(customer, customerDto);
-        customerRepository.save(customer);
+        repo.save(customer);
     }
 
     private void updateSupplierFields(Customer customer, CustomerDto customerDto) {

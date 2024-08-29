@@ -22,7 +22,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final UserRepository userRepository;
+    private final UserRepository repo;
     @Lazy
     @Autowired
     private UserProfileService userProfileService;
@@ -30,27 +30,27 @@ public class UserService {
     private final FileService fileService;
 
     public List<User> getAll() {
-        return userRepository.findAll();
+        return repo.findAll();
     }
 
     public User getById(int id) {
-        return userRepository.findById(id);
+        return repo.findById(id);
     }
 
     public void save(User user) {
-        userRepository.save(user);
+        repo.save(user);
     }
 
     public User getByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return repo.findByUsername(username);
     }
 
     public Boolean existByUsername(String username) {
-        return userRepository.existsByUsername(username);
+        return repo.existsByUsername(username);
     }
 
     public void getAllUsersDataInModel(Model model, String username) {
-        User user = userRepository.findByUsername(username);
+        User user = repo.findByUsername(username);
         if (user != null) {
             UserProfile userProfile = userProfileService.getUserProfileByUserId(user.getId());
             model.addAttribute("userProfile", userProfile);
@@ -61,20 +61,20 @@ public class UserService {
     }
 
     public void delete(int id) throws NotFoundException, IOException {
-        if (!userRepository.existsById(id)) {
+        if (!repo.existsById(id)) {
             throw new NotFoundException("Could not find any user with ID " + id, "/users-page");
         }
         UserProfile userProfile = userProfileService.getUserProfileByUserId(id);
         if (userProfile.getProfilePictureUrl() != null) {
             fileService.deleteFile(userProfile.getProfilePictureUrl());
         }
-        userRepository.findById(id).getRoles().clear();
-        userRepository.deleteById(id);
+        repo.findById(id).getRoles().clear();
+        repo.deleteById(id);
     }
 
     public void edit(int id, UserDto userDto, BindingResult result) throws ValidationException, NotFoundException, NameExistException{
         ExceptionHelper.throwValidationException(result, "/edit-user-page/" + id);
-        User user = userRepository.findById(id);
+        User user = repo.findById(id);
         if (user == null) {
             throw new NotFoundException("Could not find any user with ID " + id, "/edit-user-page/" + id);
         }
@@ -82,7 +82,7 @@ public class UserService {
             throw new NameExistException("A user with this username already exists. Please choose a different username.", "/edit-user-page/" + id);
         }
         updateUserFields(user, userDto);
-        userRepository.save(user);
+        repo.save(user);
     }
 
     private void updateUserFields(User user, UserDto userDto) {

@@ -43,6 +43,7 @@ public class SecurityConstants {
             "/add-product-page",
             "/edit-product-page",
             "/add-customer-page",
-            "/edit-customer-page"
+            "/edit-customer-page",
+            "/add-purchase-page"
     };
 }

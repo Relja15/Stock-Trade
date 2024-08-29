@@ -1,14 +1,10 @@
 package com.viser.StockTrade.service;
 
-import com.viser.StockTrade.dto.CategoryDto;
 import com.viser.StockTrade.dto.SupplierDto;
-import com.viser.StockTrade.entity.Category;
-import com.viser.StockTrade.entity.Product;
 import com.viser.StockTrade.entity.Supplier;
 import com.viser.StockTrade.exceptions.*;
 import com.viser.StockTrade.repository.SupplierRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
@@ -17,21 +13,21 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SupplierService {
-    private final SupplierRepository supplierRepository;
+    private final SupplierRepository repo;
     private final ProductService productService;
 
     public List<Supplier> getAll(){
-        return supplierRepository.findAll();
+        return repo.findAll();
     }
 
-    public Supplier getById(int id) { return supplierRepository.findById(id); }
+    public Supplier getById(int id) { return repo.findById(id); }
 
     public boolean existByName(String name){
-        return supplierRepository.existsByName(name);
+        return repo.existsByName(name);
     }
 
     public boolean existById(int id){
-        return supplierRepository.existsById(id);
+        return repo.existsById(id);
     }
 
     public void add(SupplierDto supplierDto, BindingResult result) throws ValidationException, NameExistException {
@@ -41,7 +37,7 @@ public class SupplierService {
         }
         Supplier supplier = new Supplier();
         updateSupplierFields(supplier, supplierDto);
-        supplierRepository.save(supplier);
+        repo.save(supplier);
     }
 
     public void delete(int id) throws NotFoundException, ForeignKeyConstraintViolationException {
@@ -51,7 +47,7 @@ public class SupplierService {
         if(productService.existBySupplierId(id)){
             throw new ForeignKeyConstraintViolationException("The supplier cannot be deleted because it has associated products.", "/supplier-page");
         }
-        supplierRepository.deleteById(id);
+        repo.deleteById(id);
     }
 
     public void edit(int id, SupplierDto supplierDto, BindingResult result) throws ValidationException, NotFoundException, NameExistException {
@@ -64,7 +60,7 @@ public class SupplierService {
             throw new NameExistException("A supplier with this name already exists. Please choose a different name.", "/edit-supplier-page/" + id);
         }
         updateSupplierFields(supplier, supplierDto);
-        supplierRepository.save(supplier);
+        repo.save(supplier);
     }
 
     private void updateSupplierFields(Supplier supplier, SupplierDto supplierDto) {

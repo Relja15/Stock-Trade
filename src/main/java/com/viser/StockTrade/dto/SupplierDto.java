@@ -1,6 +1,7 @@
 package com.viser.StockTrade.dto;
 
 import com.viser.StockTrade.validation.BasicValidation;
+import com.viser.StockTrade.validation.ValidValue;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -13,7 +14,6 @@ public class SupplierDto {
     private String address;
     @BasicValidation(minLength = 5, message = "Email must be at least {minLength} characters long and cannot be just spaces.")
     private String email;
-    @Pattern(regexp = "\\d+", message = "The field must contain only numbers.")
-    @Size(min = 8, max = 11, message = "The field must be between 8 and 11 characters long and contain only numbers")
+    @ValidValue
     private String phone;
 }

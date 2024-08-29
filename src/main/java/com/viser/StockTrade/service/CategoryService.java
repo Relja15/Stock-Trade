@@ -14,24 +14,24 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
-    private final CategoryRepository categoryRepository;
+    private final CategoryRepository repo;
     private final ProductService productService;
     private final FileService fileService;
 
     public List<Category> getAll() {
-        return categoryRepository.findAll();
+        return repo.findAll();
     }
 
     public Category getById(int id) {
-        return categoryRepository.findById(id);
+        return repo.findById(id);
     }
 
     public boolean existByName(String name) {
-        return categoryRepository.existsByName(name);
+        return repo.existsByName(name);
     }
 
     public boolean existById(int id) {
-        return categoryRepository.existsById(id);
+        return repo.existsById(id);
     }
 
     public void add(CategoryDto categoryDto, BindingResult result) throws ValidationException, NameExistException, IOException {
@@ -42,7 +42,7 @@ public class CategoryService {
         Category category = new Category();
         updateCategoryFields(category, categoryDto);
         handleCategoryIcon(category, categoryDto);
-        categoryRepository.save(category);
+        repo.save(category);
     }
 
     public void delete(int id) throws NotFoundException, ForeignKeyConstraintViolationException, IOException {
@@ -53,7 +53,7 @@ public class CategoryService {
             throw new ForeignKeyConstraintViolationException("The category cannot be deleted because it has associated products.", "/category-page");
         }
         fileService.deleteFile(getById(id).getIcon());
-        categoryRepository.deleteById(id);
+        repo.deleteById(id);
     }
 
     public void edit(int id, CategoryDto categoryDto, BindingResult result) throws ValidationException, NotFoundException, NameExistException, IOException {
@@ -67,11 +67,11 @@ public class CategoryService {
         }
         updateCategoryFields(category, categoryDto);
         handleCategoryIcon(category, categoryDto);
-        categoryRepository.save(category);
+        repo.save(category);
     }
 
     private Category findCategoryById(int id) {
-        return categoryRepository.findById(id);
+        return repo.findById(id);
     }
 
     private void updateCategoryFields(Category category, CategoryDto categoryDto) {

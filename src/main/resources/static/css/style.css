@@ -59,6 +59,13 @@ h6 {
     color: #012970;
 }
 
+.pagetitle h3 {
+    font-size: 22px;
+    margin-bottom: 0;
+    font-weight: 600;
+    color: #012970;
+}
+
 /*--------------------------------------------------------------
 # Back to top button
 --------------------------------------------------------------*/
@@ -1241,3 +1248,71 @@ h6 {
     justify-content: flex-end; /* Poravnava sadržaj na desnu stranu */
     gap: 8px; /* Dodaje razmak između dugmadi */
 }
+
+.custom-input {
+    width: 25%;
+    padding: .375rem .75rem;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.custom-input:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 .2rem rgba(38, 143, 255, .25);
+}
+
+.item-row {
+    margin-bottom: 1rem; /* Dodaje razmak između redova */
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+.form-group button {
+    margin-left: 5px;
+}
+
+.form-group input, .form-group select {
+    flex: 1;
+}
+
+/*.container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}*/
+
+.top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 112%;
+}
+
+.actions {
+    display: flex;
+    gap: 10px; /* Razmak između dugmadi */
+}
+
+.total-amount {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+}
+
+.total-amount label {
+    margin-right: 10px;
+}
+

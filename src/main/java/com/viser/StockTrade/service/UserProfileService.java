@@ -4,7 +4,6 @@ import com.viser.StockTrade.dto.UserProfileDto;
 import com.viser.StockTrade.entity.User;
 import com.viser.StockTrade.entity.UserProfile;
 import com.viser.StockTrade.exceptions.ExceptionHelper;
-import com.viser.StockTrade.exceptions.NotFoundException;
 import com.viser.StockTrade.exceptions.ValidationException;
 import com.viser.StockTrade.repository.UserProfileRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,27 +18,27 @@ import java.io.IOException;
 @Service
 @RequiredArgsConstructor
 public class UserProfileService {
-    private final UserProfileRepository userProfileRepository;
+    private final UserProfileRepository repo;
     @Lazy
     @Autowired
     private UserService userService;
     private final FileService fileService;
 
     public void save(UserProfile userProfile) {
-        userProfileRepository.save(userProfile);
+        repo.save(userProfile);
     }
 
     public UserProfile getUserProfileByUsername(String username) {
         User user = userService.getByUsername(username);
         if (user != null) {
-            return userProfileRepository.findByUserId(user.getId());
+            return repo.findByUserId(user.getId());
         }
         return null;
     }
 
 
     public void delete(UserProfile userProfile) {
-        userProfileRepository.delete(userProfile);
+        repo.delete(userProfile);
     }
 
     public void updateUserProfile(UserProfileDto userProfileDto, String username, BindingResult result) throws ValidationException, IOException {
@@ -49,7 +48,7 @@ public class UserProfileService {
         updateUserProfileFields(userProfileDto, userProfile);
         handleProfilePicture(userProfileDto, userProfile, user.getId());
 
-        userProfileRepository.save(userProfile);
+        repo.save(userProfile);
     }
 
     private User getUserByUsername(String username) {
@@ -61,7 +60,7 @@ public class UserProfileService {
     }
 
     public UserProfile getUserProfileByUserId(int userId) {
-        return userProfileRepository.findByUserId(userId);
+        return repo.findByUserId(userId);
     }
 
     private void updateUserProfileFields(UserProfileDto userProfileDto, UserProfile userProfile) {

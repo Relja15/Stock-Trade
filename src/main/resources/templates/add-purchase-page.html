@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Purchase - Stock-Trade</title>
+    <title>Add Purchase - Stock-Trade</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -25,11 +25,15 @@
     <link th:href="@{/vendor/simple-datatables/style.css}" type="text/css" rel="stylesheet">
     <link th:href="@{/css/style.css}" type="text/css" rel="stylesheet">
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <script th:inline="javascript">
+        const products = JSON.parse([[${products}]]);
+    </script>
+
+
 </head>
-
 <body>
-
-<!-- ======= Header ======= -->
 <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
@@ -46,8 +50,10 @@
             <li class="nav-item dropdown pe-3">
 
                 <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                    <img th:src="${userProfile.getProfilePictureUrl() != null ? userProfile.getProfilePictureUrl() : '/img/defaultProfileImg.png'}" alt="Profile" class="rounded-circle">
-                    <span class="d-none d-md-block dropdown-toggle ps-2" th:text="${userProfile.getFirstName() != null && userProfile.getLastName() != null ? userProfile.getFirstName() + ' ' + userProfile.getLastName().substring(0, 1) + '.' : username}"></span>
+                    <img th:src="${userProfile.getProfilePictureUrl() != null ? userProfile.getProfilePictureUrl() : '/img/defaultProfileImg.png'}"
+                         alt="Profile" class="rounded-circle">
+                    <span class="d-none d-md-block dropdown-toggle ps-2"
+                          th:text="${userProfile.getFirstName() != null && userProfile.getLastName() != null ? userProfile.getFirstName() + ' ' + userProfile.getLastName().substring(0, 1) + '.' : username}"></span>
                 </a><!-- End Profile Iamge Icon -->
 
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
@@ -59,7 +65,8 @@
                     </li>
 
                     <li>
-                        <a class="dropdown-item d-flex align-items-center" th:href="@{/profile-page}">
+                        <a class="dropdown-item d-flex align-items-center"
+                           th:href="@{/profile-page}">
                             <i class="bi bi-person"></i>
                             <span>My Profile</span>
                         </a>
@@ -126,7 +133,7 @@
         </li><!-- End Supplier Page Nav -->
 
         <li class="nav-item">
-            <a class="nav-link " href="#">
+            <a class="nav-link collapsed" th:href="@{/purchases-page}">
                 <i class="bi bi-bag-check"></i>
                 <span>Purchases</span>
             </a>
@@ -168,114 +175,75 @@
     </ul>
 
 </aside><!-- End Sidebar-->
-
 <main id="main" class="main">
-
     <div class="pagetitle">
-        <h1>Purchase</h1>
+        <h1>Add Purchase</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a th:href="@{/index}">Home</a></li>
-                <li class="breadcrumb-item">Purchase</li>
+                <li class="breadcrumb-item"><a th:href="@{/purchases-page}">Purchases</a></li>
+                <li class="breadcrumb-item active">Add</li>
             </ol>
         </nav>
-    </div><!-- End Page Title -->
-
-    <section class="section">
-        <div class="row">
-            <div class="col-lg-12">
-
-                <div class="card">
-                    <div class="card-body">
-                        <br>
-                        <div th:if="${success != null}" class="alert alert-success" role="alert">
-                            <p th:text="${success}"></p>
-                        </div>
-                        <div th:if="${error != null}" class="alert alert-danger" role="alert">
-                            <p th:text="${error}"></p>
-                        </div>
-                        <button type="button" class="btn btn-outline-primary data-btn">
-                            <a th:href="@{/add-purchase-page}">Add Purchase</a>
-                        </button>
-
-                        <!-- Table with stripped rows -->
-                        <table class="table datatable">
-                            <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Supplier</th>
-                                <th>Total Amount</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="purchase : ${purchases}">
-                                <td class="product-name" th:text="${purchase.getDate()}"></td>
-                                <td class="product-price" th:text="${purchase.getSupplier.getName()}"></td>
-                                <td class="product-quantity" th:text="${purchase.getTotalAmount()}"></td>
-                                <td class="action-buttons">
-                                    <button class="btn btn-outline-primary"
-                                            th:attr="onclick='openModalWithDetails(' + ${purchase.id} + ')'">
-                                        Details
-                                    </button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Modal -->
-    <!-- Modal -->
-    <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="detailsModalLabel">Purchase Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Additional Information -->
-                    <div id="purchase-info">
-                        <p><strong>Date:</strong> <span id="purchase-date"></span></p>
-                        <p><strong>Supplier:</strong> <span id="supplier-name"></span></p>
-                        <p><strong>Total Amount:</strong> <span id="total-amount"></span></p>
-                    </div>
-                    <!-- Table for Purchase Items -->
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                        </tr>
-                        </thead>
-                        <tbody id="purchase-details-body">
-                        <!-- Dynamic Content Will Be Loaded Here -->
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
     </div>
+    <div class="container mt-5">
+        <form id="purchaseForm" action="/api/purchase/add" method="post">
+            <div th:if="${error != null}" class="alert alert-danger" role="alert">
+                <p th:text="${error}"></p>
+            </div>
+            <div class="mb-3">
+                <label for="supplier" class="form-label">Supplier</label>
+                <select id="supplier" name="supplier" class="form-control" required>
+                    <option value="" disabled selected>Select a supplier</option>
+                    <!-- Iterate over the list of suppliers -->
+                    <option th:each="supplier : ${suppliers}"
+                            th:value="${supplier.getId}"
+                            th:text="${supplier.getName()}"></option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="date" class="form-label">Delivery Date</label>
+                <input type="date" id="date" name="date" class="form-control" required>
+            </div>
+            <br>
+
+            <div id="items-container" class="pagetitle">
+                <h3>Purchases Product</h3>
+                <br>
+            </div>
+
+            <br>
+            <div class="container">
+                <div class="top-row">
+                    <div class="actions">
+                        <button type="button" id="addItemButton" class="btn btn-primary">Add Product</button>
+                        <button type="submit" class="btn btn-primary">Save Purchases</button>
+                    </div>
+                    <div class="total-amount">
+                        <label for="totalAmount">Total Amount</label>
+                        <input type="number" id="totalAmount" name="totalAmount" class="custom-input" readonly>
+                    </div>
+                </div>
+                <!-- Ostali sadržaji -->
+            </div>
 
 
-
+        </form>
+    </div>
 </main><!-- End #main -->
-
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
         class="bi bi-arrow-up-short"></i></a>
 
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    flatpickr("#date", {
+        dateFormat: "Y-m-d"
+    });
+</script>
 
 
-
-<!-- Vendor JS Files -->
+<!--JS Files -->
 <script th:src="@{/vendor/apexcharts/apexcharts.min.js}"></script>
 <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/vendor/chart.js/chart.umd.js}"></script>
@@ -285,9 +253,6 @@
 <script th:src="@{/vendor/tinymce/tinymce.min.js}"></script>
 <script th:src="@{/vendor/php-email-form/validate.js}"></script>
 <script th:src="@{/js/main.js}"></script>
-<script th:src="@{/js/openModalWithDetails.js}"></script>
-
-
+<script th:src="@{/js/purchase.js}"></script>
 </body>
-
 </html>

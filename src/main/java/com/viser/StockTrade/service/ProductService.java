@@ -1,5 +1,7 @@
 package com.viser.StockTrade.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.viser.StockTrade.dto.ProductDto;
 import com.viser.StockTrade.entity.Category;
 import com.viser.StockTrade.entity.Product;
@@ -20,7 +22,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ProductService {
-    private final ProductRepository productRepository;
+    private final ProductRepository repo;
     @Lazy
     @Autowired
     private CategoryService categoryService;
@@ -28,28 +30,36 @@ public class ProductService {
     @Autowired
     private SupplierService supplierService;
 
+    public void save(Product product){
+        repo.save(product);
+    }
+
     public List<Product> getAll() {
-        return productRepository.findAll();
+        return repo.findAll();
     }
 
     public Product getById(int id) {
-        return productRepository.findById(id);
+        return repo.findById(id);
+    }
+
+    public Product getByName(String name){
+        return repo.findByName(name);
     }
 
     public boolean existByName(String name) {
-        return productRepository.existsByName(name);
+        return repo.existsByName(name);
     }
 
     public boolean existById(int id){
-        return productRepository.existsById(id);
+        return repo.existsById(id);
     }
 
     public boolean existByCategoryId(int id) {
-        return productRepository.existsByCategoryId(id);
+        return repo.existsByCategoryId(id);
     }
 
     public boolean existBySupplierId(int id) {
-        return productRepository.existsBySupplierId(id);
+        return repo.existsBySupplierId(id);
     }
 
     public void add(ProductDto productDto, BindingResult result) throws ValidationException, NameExistException {
@@ -59,14 +69,14 @@ public class ProductService {
         }
         Product product = new Product();
         updateProductFields(product, productDto);
-        productRepository.save(product);
+        save(product);
     }
 
     public void delete(int id) throws NotFoundException {
         if(!existById(id)){
             throw new NotFoundException("Could not find any customer with ID " + id, "/product-page");
         }
-        productRepository.deleteById(id);
+        repo.deleteById(id);
     }
 
     public void edit(int id, ProductDto productDto, BindingResult result) throws ValidationException, NotFoundException, NameExistException {
@@ -79,7 +89,7 @@ public class ProductService {
             throw new NameExistException("A product with this name already exists. Please choose a different name.", "/edit-product-page/" + id);
         }
         updateProductFields(product, productDto);
-        productRepository.save(product);
+        save(product);
     }
 
     private void updateProductFields(Product product, ProductDto productDto) {
@@ -87,7 +97,7 @@ public class ProductService {
         product.setPrice(getNonEmptyInt(getStringFromDtoToInt(productDto.getPrice()), product.getPrice()));
         product.setStockQuantity(getNonEmptyInt(getStringFromDtoToInt(productDto.getStockQty()), product.getStockQuantity()));
         product.setCategory(getNonEmptyCategory(categoryService.getById(getStringFromDtoToInt(productDto.getCategoryId())), product.getCategory()));
-        product.setSupplier(getNonEmptySupplier(supplierService.getById(getStringFromDtoToInt(productDto.getCategoryId())), product.getSupplier()));
+        product.setSupplier(getNonEmptySupplier(supplierService.getById(getStringFromDtoToInt(productDto.getSupplierId())), product.getSupplier()));
     }
 
     private String getNonEmptyString(String newValue, String oldValue) {
@@ -108,5 +118,10 @@ public class ProductService {
 
     private int getStringFromDtoToInt(String stringFromDto){
         return !stringFromDto.isEmpty() ? Integer.parseInt(stringFromDto) : 0;
+    }
+
+    public String getProductListInJson() throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writeValueAsString(getAll());
     }
 }

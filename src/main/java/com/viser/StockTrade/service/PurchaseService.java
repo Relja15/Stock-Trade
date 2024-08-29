@@ -1,0 +1,75 @@
+package com.viser.StockTrade.service;
+
+import com.viser.StockTrade.dto.PurchaseDto;
+import com.viser.StockTrade.dto.PurchasesItemDto;
+import com.viser.StockTrade.entity.Product;
+import com.viser.StockTrade.entity.Purchase;
+import com.viser.StockTrade.entity.PurchaseItem;
+import com.viser.StockTrade.exceptions.ExceptionHelper;
+import com.viser.StockTrade.exceptions.ValidationException;
+import com.viser.StockTrade.repository.PurchaseRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+public class PurchaseService {
+    private final PurchaseRepository repo;
+    private final SupplierService supplierService;
+    private final ProductService productService;
+
+    public List<Purchase> getAll() {
+        return repo.findAll();
+    }
+
+    public void add(PurchaseDto purchaseDto, BindingResult result) throws ValidationException {
+        ExceptionHelper.throwValidationException(result, "/add-purchase-page");
+        Purchase purchase = new Purchase();
+        updatePurchaseFields(purchase, purchaseDto);
+        updateQuantityInProduct(purchase.getPurchaseItems());
+        repo.save(purchase);
+    }
+
+    public PurchaseDto getPurchaseInDto(int id) {
+        Purchase purchase = repo.findById(id);
+        PurchaseDto purchaseDto = new PurchaseDto();
+        purchaseDto.setId(purchase.getId());
+        purchaseDto.setSupplier(String.valueOf(purchase.getSupplier().getName()));
+        purchaseDto.setDate(purchase.getDate());
+        purchaseDto.setTotalAmount(String.valueOf(purchase.getTotalAmount()));
+        purchaseDto.setPurchaseItems(purchase.getPurchaseItems().stream()
+                .map(item -> new PurchasesItemDto(item.getProductName(), item.getQuantity(), item.getPrice()))
+                .collect(Collectors.toList()));
+
+        return purchaseDto;
+    }
+
+    private void updateQuantityInProduct(List<PurchaseItem> purchaseItems){
+        for(PurchaseItem purchaseItem : purchaseItems){
+            Product product = productService.getByName(purchaseItem.getProductName());
+            product.setStockQuantity(product.getStockQuantity() + purchaseItem.getQuantity());
+            productService.save(product);
+        }
+    }
+
+    private void updatePurchaseFields(Purchase purchase, PurchaseDto purchaseDto) {
+        purchase.setSupplier(supplierService.getById(Integer.parseInt(purchaseDto.getSupplier())));
+        purchase.setDate(purchaseDto.getDate());
+        purchase.setTotalAmount(Integer.parseInt(purchaseDto.getTotalAmount()));
+
+        List<PurchaseItem> purchaseItems = purchaseDto.getPurchaseItems().stream().map(dto -> {
+            PurchaseItem item = new PurchaseItem();
+            item.setProductName(dto.getProduct());
+            item.setQuantity(dto.getQuantity());
+            item.setPrice(dto.getPrice());
+            item.setPurchase(purchase);
+            return item;
+        }).collect(Collectors.toList());
+
+        purchase.setPurchaseItems(purchaseItems);
+    }
+}

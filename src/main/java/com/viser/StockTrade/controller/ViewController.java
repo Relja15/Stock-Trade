@@ -1,5 +1,6 @@
 package com.viser.StockTrade.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.viser.StockTrade.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +19,7 @@ public class ViewController {
     private final SupplierService supplierService;
     private final ProductService productService;
     private final CustomerService customerService;
+    private final PurchaseService purchaseService;
 
     @GetMapping("/login-page")
     public String showLoginPage() {
@@ -54,6 +56,7 @@ public class ViewController {
     @GetMapping("/purchases-page")
     public String showPurchasesPage(Model model, Principal principal) {
         userService.getAllUsersDataInModel(model, principal.getName());
+        model.addAttribute("purchases", purchaseService.getAll());
         return "purchases-page";
     }
 
@@ -167,5 +170,13 @@ public class ViewController {
         userService.getAllUsersDataInModel(model, principal.getName());
         model.addAttribute("customer", customerService.getById(id));
         return "edit-customer-page";
+    }
+
+    @GetMapping("/add-purchase-page")
+    public String showAddPurchasePage(Model model, Principal principal) throws JsonProcessingException {
+        userService.getAllUsersDataInModel(model, principal.getName());
+        model.addAttribute("suppliers", supplierService.getAll());
+        model.addAttribute("products", productService.getProductListInJson());
+        return "add-purchase-page";
     }
 }
