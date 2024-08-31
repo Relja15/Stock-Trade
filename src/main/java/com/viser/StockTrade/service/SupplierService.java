@@ -30,6 +30,10 @@ public class SupplierService {
         return repo.existsById(id);
     }
 
+    public long countAll(){
+        return repo.count();
+    }
+
     public void add(SupplierDto supplierDto, BindingResult result) throws ValidationException, NameExistException {
         ExceptionHelper.throwValidationException(result, "/add-supplier-page");
         if(existByName(supplierDto.getName())){

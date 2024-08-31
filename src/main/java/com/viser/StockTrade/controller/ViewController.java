@@ -18,66 +18,20 @@ public class ViewController {
     private final CategoryService categoryService;
     private final SupplierService supplierService;
     private final ProductService productService;
-    private final CustomerService customerService;
     private final PurchaseService purchaseService;
-
-    @GetMapping("/login-page")
-    public String showLoginPage() {
-        return "login-page";
-    }
 
     @GetMapping("/index")
     public String showIndexPage(Model model, Principal principal) {
         userService.getAllUsersDataInModel(model, principal.getName());
+        model.addAttribute("categoryCount", categoryService.countAll());
+        model.addAttribute("productCount", productService.countAll());
+        model.addAttribute("supplerCount", supplierService.countAll());
         return "index";
     }
 
-    @GetMapping("/category-page")
-    public String showCategoryPage(Model model, Principal principal) {
-        userService.getAllUsersDataInModel(model, principal.getName());
-        model.addAttribute("categories", categoryService.getAll());
-        return "category-page";
-    }
-
-    @GetMapping("/product-page")
-    public String showProductPage(Model model, Principal principal) {
-        userService.getAllUsersDataInModel(model, principal.getName());
-        model.addAttribute("products", productService.getAll());
-        return "product-page";
-    }
-
-    @GetMapping("/customer-page")
-    public String showCustomerPage(Model model, Principal principal) {
-        userService.getAllUsersDataInModel(model, principal.getName());
-        model.addAttribute("customers", customerService.getAll());
-        return "customer-page";
-    }
-
-    @GetMapping("/purchases-page")
-    public String showPurchasesPage(Model model, Principal principal) {
-        userService.getAllUsersDataInModel(model, principal.getName());
-        model.addAttribute("purchases", purchaseService.getAll());
-        return "purchases-page";
-    }
-
-    @GetMapping("/sales-page")
-    public String showSalesPage(Model model, Principal principal) {
-        userService.getAllUsersDataInModel(model, principal.getName());
-        return "sales-page";
-    }
-
-    @GetMapping("/supplier-page")
-    public String showSupplierPage(Model model, Principal principal) {
-        userService.getAllUsersDataInModel(model, principal.getName());
-        model.addAttribute("suppliers", supplierService.getAll());
-        return "supplier-page";
-    }
-
-    @GetMapping("/roles-page")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public String showRolesPage(Model model, Principal principal) {
-        userService.getAllUsersDataInModel(model, principal.getName());
-        return "roles-page";
+    @GetMapping("/login-page")
+    public String showLoginPage() {
+        return "login-page";
     }
 
     @GetMapping("/users-page")
@@ -86,18 +40,6 @@ public class ViewController {
         userService.getAllUsersDataInModel(model, principal.getName());
         model.addAttribute("users", userService.getAll());
         return "users-page";
-    }
-
-    @GetMapping("/profile-page")
-    public String showUserProfile(Model model, Principal principal) {
-        userService.getAllUsersDataInModel(model, principal.getName());
-        return "profile-page";
-    }
-
-    @GetMapping("/edit-profile")
-    public String shoeEditProfilePage(Model model, Principal principal) {
-        userService.getAllUsersDataInModel(model, principal.getName());
-        return "edit-profile";
     }
 
     @GetMapping("/add-user-page")
@@ -116,6 +58,25 @@ public class ViewController {
         return "edit-user-page";
     }
 
+    @GetMapping("/profile-page")
+    public String showUserProfile(Model model, Principal principal) {
+        userService.getAllUsersDataInModel(model, principal.getName());
+        return "profile-page";
+    }
+
+    @GetMapping("/edit-profile")
+    public String shoeEditProfilePage(Model model, Principal principal) {
+        userService.getAllUsersDataInModel(model, principal.getName());
+        return "edit-profile";
+    }
+
+    @GetMapping("/category-page")
+    public String showCategoryPage(Model model, Principal principal) {
+        userService.getAllUsersDataInModel(model, principal.getName());
+        model.addAttribute("categories", categoryService.getAll());
+        return "category-page";
+    }
+
     @GetMapping("/add-category-page")
     public String showAddCategory(Model model, Principal principal) {
         userService.getAllUsersDataInModel(model, principal.getName());
@@ -129,17 +90,11 @@ public class ViewController {
         return "/edit-category-page";
     }
 
-    @GetMapping("/add-supplier-page")
-    public String showAddSupplier(Model model, Principal principal) {
+    @GetMapping("/product-page")
+    public String showProductPage(Model model, Principal principal) {
         userService.getAllUsersDataInModel(model, principal.getName());
-        return "add-supplier-page";
-    }
-
-    @GetMapping("/edit-supplier-page/{id}")
-    public String showEditSupplierCategory(@PathVariable("id") Integer id, Model model, Principal principal) {
-        userService.getAllUsersDataInModel(model, principal.getName());
-        model.addAttribute("supplier", supplierService.getById(id));
-        return "edit-supplier-page";
+        model.addAttribute("products", productService.getAll());
+        return "product-page";
     }
 
     @GetMapping("/add-product-page")
@@ -159,17 +114,31 @@ public class ViewController {
         return "edit-product-page";
     }
 
-    @GetMapping("/add-customer-page")
-    public String showAddCustomerPage(Model model, Principal principal) {
+    @GetMapping("/supplier-page")
+    public String showSupplierPage(Model model, Principal principal) {
         userService.getAllUsersDataInModel(model, principal.getName());
-        return "add-customer-page";
+        model.addAttribute("suppliers", supplierService.getAll());
+        return "supplier-page";
     }
 
-    @GetMapping("/edit-customer-page/{id}")
-    public String showEditCustomerPage(@PathVariable("id") Integer id, Model model, Principal principal) {
+    @GetMapping("/add-supplier-page")
+    public String showAddSupplier(Model model, Principal principal) {
         userService.getAllUsersDataInModel(model, principal.getName());
-        model.addAttribute("customer", customerService.getById(id));
-        return "edit-customer-page";
+        return "add-supplier-page";
+    }
+
+    @GetMapping("/edit-supplier-page/{id}")
+    public String showEditSupplierCategory(@PathVariable("id") Integer id, Model model, Principal principal) {
+        userService.getAllUsersDataInModel(model, principal.getName());
+        model.addAttribute("supplier", supplierService.getById(id));
+        return "edit-supplier-page";
+    }
+
+    @GetMapping("/purchases-page")
+    public String showPurchasesPage(Model model, Principal principal) {
+        userService.getAllUsersDataInModel(model, principal.getName());
+        model.addAttribute("purchases", purchaseService.getAll());
+        return "purchases-page";
     }
 
     @GetMapping("/add-purchase-page")

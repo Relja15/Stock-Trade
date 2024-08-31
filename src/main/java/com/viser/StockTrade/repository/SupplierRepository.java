@@ -9,4 +9,6 @@ public interface SupplierRepository extends JpaRepository<Supplier, Integer> {
     Supplier findById(int id);
 
     boolean existsByName(String name);
+
+    long count();
 }

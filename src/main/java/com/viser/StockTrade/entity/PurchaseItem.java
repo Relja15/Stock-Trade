@@ -25,6 +25,9 @@ public class PurchaseItem {
     @Column(name = "product_name", nullable = false)
     private String productName;
 
+    @Column(name = "product_category", nullable = false)
+    private String productCategory;
+
     @Column(nullable = false)
     private int quantity;
 

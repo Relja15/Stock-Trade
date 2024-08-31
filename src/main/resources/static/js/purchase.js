@@ -2,10 +2,10 @@ document.getElementById('supplier').addEventListener('change', handleSupplierCha
 document.getElementById('addItemButton').addEventListener('click', addItem);
 
 let itemCounter = 0;
-let selectedSupplierId = null;
+let selectedSupplierName = null;
 
 function handleSupplierChange() {
-  selectedSupplierId = document.getElementById('supplier').value;
+  selectedSupplierName = document.getElementById('supplier').value;
 
   // Ukloni sve prethodno dodane redove kada se dobavljač promeni
   const itemsContainer = document.getElementById('items-container');
@@ -18,7 +18,7 @@ function handleSupplierChange() {
 }
 
 function addItem() {
-  if (!selectedSupplierId) {
+  if (!selectedSupplierName) {
     alert('Please select a supplier before adding items.');
     return;
   }
@@ -47,7 +47,7 @@ function addItem() {
   selectElement.appendChild(chooseOption);
 
   products.forEach(product => {
-    if (Number(product.supplier.id) === Number(selectedSupplierId)) {
+    if (product.supplier.name === selectedSupplierName) {
       const option = document.createElement('option');
       option.value = product.name;
       option.textContent = product.name;

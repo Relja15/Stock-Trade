@@ -34,6 +34,10 @@ public class CategoryService {
         return repo.existsById(id);
     }
 
+    public long countAll(){
+        return repo.count();
+    }
+
     public void add(CategoryDto categoryDto, BindingResult result) throws ValidationException, NameExistException, IOException {
         ExceptionHelper.throwValidationException(result, "/add-category-page");
         if (existByName(categoryDto.getName())) {

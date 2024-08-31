@@ -1316,3 +1316,60 @@ h6 {
     margin-right: 10px;
 }
 
+/* Stilizacija kontejnera za grafikone */
+.chart-container {
+    display: flex;
+    justify-content: space-between; /* Raspoređuje grafikone sa prostorom između */
+    width: 100%; /* Podesi kontejner da zauzme celu širinu */
+    height: 500px; /* Postavi visinu kontejnera */
+    box-sizing: border-box; /* Uključi padding i border u ukupnu širinu i visinu */
+    overflow: hidden; /* Sprečava prekoračenje sadržaja */
+}
+
+/* Stilizacija pojedinačnih grafikon stavki */
+.chart-item {
+    flex: 1; /* Obezbeđuje da oba grafikona zauzmu jednake delove prostora */
+    margin: 0 10px; /* Razmak između grafikona */
+    display: flex;
+    flex-direction: column; /* Postavi naslove i grafikone u kolonu */
+    align-items: center; /* Centriraj naslove i grafikone horizontalno */
+    overflow: hidden; /* Sprečava prekoračenje sadržaja */
+}
+
+/* Naslovi grafikona */
+.chart-title {
+    margin-bottom: 10px; /* Razmak između naslova i grafikona */
+    text-align: center; /* Poravnanje naslova na sredinu */
+    white-space: nowrap; /* Sprečava prelamanje teksta */
+    overflow: hidden; /* Sprečava prekoračenje teksta */
+    text-overflow: ellipsis; /* Dodaje elipsu ako tekst ne staje */
+}
+
+/* Stilizacija samih grafikona */
+#category-chart,
+#supplier-chart {
+    width: 100%; /* Postavi širinu na 100% kontejnera */
+    height: 100%; /* Postavi visinu na 100% kontejnera */
+    box-sizing: border-box; /* Uključi padding i border u ukupnu širinu i visinu */
+}
+
+#product-chart {
+    height: 250px; /* Manja visina grafikona */
+}
+
+.card.info-card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Blaga senka za kartice */
+}
+
+.card-body h3 {
+    margin-bottom: 20px; /* Margina ispod poruke */
+}
+
+
+
+
+.category-icon {
+    width: 40px; /* Ili bilo koja veličina koja ti odgovara */
+    height: auto; /* Održava proporcije slike */
+}
+

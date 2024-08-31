@@ -62,6 +62,10 @@ public class ProductService {
         return repo.existsBySupplierId(id);
     }
 
+    public  long countAll(){
+        return repo.count();
+    }
+
     public void add(ProductDto productDto, BindingResult result) throws ValidationException, NameExistException {
         ExceptionHelper.throwValidationException(result, "/add-product-page");
         if (existByName(productDto.getName())) {

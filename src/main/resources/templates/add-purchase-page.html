@@ -119,13 +119,6 @@
         </li><!-- End Product Page Nav -->
 
         <li class="nav-item">
-            <a class="nav-link collapsed" th:href="@{/customer-page}">
-                <i class="bi bi-cart-check"></i>
-                <span>Customer</span>
-            </a>
-        </li><!-- End Customer Page Nav -->
-
-        <li class="nav-item">
             <a class="nav-link collapsed" th:href="@{/supplier-page}">
                 <i class="bi bi-truck"></i>
                 <span>Supplier</span>
@@ -139,30 +132,12 @@
             </a>
         </li><!-- End Purchase Page Nav -->
 
-        <li class="nav-item">
-            <a class="nav-link collapsed" th:href="@{/sales-page}">
-                <i class="bi bi-bag"></i>
-                <span>Sales</span>
-            </a>
-        </li><!-- End Sales Page Nav -->
-
 
         <li th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}" class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-people"></i><span>Users</span><i class="bi bi-chevron-down ms-auto"></i>
+            <a class="nav-link collapsed" th:href="@{/users-page}">
+                <i class="bi bi-people"></i>
+                <span>Users</span>
             </a>
-            <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                <li>
-                    <a th:href="@{/roles-page}">
-                        <i class="bi bi-circle"></i><span>Manage Groups</span>
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/users-page}">
-                        <i class="bi bi-circle"></i><span>Manage Users</span>
-                    </a>
-                </li>
-            </ul>
         </li><!-- End Users Page Nav -->
 
         <li class="nav-item">
@@ -197,7 +172,7 @@
                     <option value="" disabled selected>Select a supplier</option>
                     <!-- Iterate over the list of suppliers -->
                     <option th:each="supplier : ${suppliers}"
-                            th:value="${supplier.getId}"
+                            th:value="${supplier.getName()}"
                             th:text="${supplier.getName()}"></option>
                 </select>
             </div>

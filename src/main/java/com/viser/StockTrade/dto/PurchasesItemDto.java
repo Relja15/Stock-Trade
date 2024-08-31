@@ -19,5 +19,3 @@ public class PurchasesItemDto {
         this.price = price;
     }
 }
-
-

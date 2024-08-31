@@ -38,7 +38,7 @@ public class PurchaseService {
         Purchase purchase = repo.findById(id);
         PurchaseDto purchaseDto = new PurchaseDto();
         purchaseDto.setId(purchase.getId());
-        purchaseDto.setSupplier(String.valueOf(purchase.getSupplier().getName()));
+        purchaseDto.setSupplier(purchase.getSupplierName());
         purchaseDto.setDate(purchase.getDate());
         purchaseDto.setTotalAmount(String.valueOf(purchase.getTotalAmount()));
         purchaseDto.setPurchaseItems(purchase.getPurchaseItems().stream()
@@ -57,13 +57,15 @@ public class PurchaseService {
     }
 
     private void updatePurchaseFields(Purchase purchase, PurchaseDto purchaseDto) {
-        purchase.setSupplier(supplierService.getById(Integer.parseInt(purchaseDto.getSupplier())));
+        purchase.setSupplierName(purchaseDto.getSupplier());
         purchase.setDate(purchaseDto.getDate());
         purchase.setTotalAmount(Integer.parseInt(purchaseDto.getTotalAmount()));
 
         List<PurchaseItem> purchaseItems = purchaseDto.getPurchaseItems().stream().map(dto -> {
             PurchaseItem item = new PurchaseItem();
+            Product product = productService.getByName(dto.getProduct());
             item.setProductName(dto.getProduct());
+            item.setProductCategory(product.getCategory().getName());
             item.setQuantity(dto.getQuantity());
             item.setPrice(dto.getPrice());
             item.setPurchase(purchase);

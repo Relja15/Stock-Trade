@@ -14,7 +14,6 @@ public class SecurityConstants {
     };
 
     public static final String[] adminRoot = {
-            "/roles-page",
             "/users-page",
             "/api/auth/register",
             "/add-user-page",
@@ -25,11 +24,9 @@ public class SecurityConstants {
     public static final String[] userRoot = {
             "/api/auth/logout",
             "/category-page",
-            "/customer-page",
             "/index",
             "/product-page",
             "/purchases-page",
-            "/sales-page",
             "/supplier-page",
             "/profile-page",
             "/edit-profile",
@@ -42,8 +39,7 @@ public class SecurityConstants {
             "/api/supplier/**",
             "/add-product-page",
             "/edit-product-page",
-            "/add-customer-page",
-            "/edit-customer-page",
-            "/add-purchase-page"
+            "/add-purchase-page",
+            "/api/charts/**"
     };
 }

@@ -26,9 +26,8 @@ public class Purchase {
     @Column(nullable = false)
     private LocalDate date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "supplier_id", nullable = false)
-    private Supplier supplier;
+    @Column(name = "supplier_name", nullable = false)
+    private String supplierName;
 
     @Column(nullable = false)
     private int totalAmount;
