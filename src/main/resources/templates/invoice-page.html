@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -162,7 +163,7 @@
                             <div class="card-body">
                                 <p><strong>Date:</strong> <span th:text="${purchase.date}"></span></p>
                                 <p><strong>Supplier:</strong> <span th:text="${purchase.getSupplierName()}"></span></p>
-                                <p><strong>Total Amount:</strong> <span th:text="${purchase.totalAmount}"></span></p>
+                                <p><strong>Total Amount:</strong> <span th:text="${purchase.totalAmount} + ' €'"></span></p>
 
                                 <!-- Button to generate PDF -->
                                 <form th:action="@{/invoices/view/{id}(id=${purchase.getId()})}" method="get" class="mt-3">
