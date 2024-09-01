@@ -77,6 +77,8 @@ function addItem() {
   priceInput.id = `price${itemCounter}`;
   priceInput.classList.add('custom-input');
   priceInput.name = `purchaseItems[${itemCounter}].price`;
+  priceInput.step="0.01";
+  priceInput.min="0";
   priceInput.required = true;
   priceInput.readOnly = true;
 
@@ -88,7 +90,7 @@ function addItem() {
   selectElement.addEventListener('change', (event) => {
     const selectedOption = event.target.options[event.target.selectedIndex];
     const productPrice = parseFloat(selectedOption.dataset.price) || 0;
-    priceInput.value = Math.round(productPrice * 0.7);
+    priceInput.value = parseFloat((productPrice * 0.7).toFixed(2));
     updateTotalAmount();
   });
 

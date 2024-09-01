@@ -5,7 +5,7 @@ function openModalWithDetails(purchaseId) {
             // Popuni dodatne informacije
             document.getElementById("purchase-date").innerText = data.date;
             document.getElementById("supplier-name").innerText = data.supplier;
-            document.getElementById("total-amount").innerText = data.totalAmount;
+            document.getElementById("total-amount").innerText = data.totalAmount + ' €';
 
             // Popuni tabelu sa stavkama
             const tableBody = document.getElementById("purchase-details-body");
@@ -14,7 +14,7 @@ function openModalWithDetails(purchaseId) {
                 const row = `<tr>
                                 <td>${item.product}</td>
                                 <td>${item.quantity}</td>
-                                <td>${item.price}</td>
+                                <td>${item.price} €</td>
                              </tr>`;
                 tableBody.innerHTML += row;
             });

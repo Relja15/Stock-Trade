@@ -134,9 +134,9 @@
         </li><!-- End Users Page Nav -->
 
         <li class="nav-item">
-            <a class="nav-link collapsed" th:href="@{/pages-blank}">
+            <a class="nav-link collapsed" th:href="@{/invoice-page}">
                 <i class="bi bi-file-earmark"></i>
-                <span>Report</span>
+                <span>Invoice</span>
             </a>
         </li><!-- End Report Page Nav -->
 
@@ -186,7 +186,7 @@
                             <tr th:each="purchase : ${purchases}">
                                 <td class="product-name" th:text="${purchase.getDate()}"></td>
                                 <td class="product-price" th:text="${purchase.getSupplierName()}"></td>
-                                <td class="product-quantity" th:text="${purchase.getTotalAmount()}"></td>
+                                <td class="product-quantity" th:text="${purchase.getTotalAmount()} + ' €'"></td>
                                 <td class="action-buttons">
                                     <button class="btn btn-outline-primary"
                                             th:attr="onclick='openModalWithDetails(' + ${purchase.id} + ')'">

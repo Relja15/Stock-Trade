@@ -20,5 +20,5 @@ public class PurchaseDto {
     @NotEmpty(message = "Purchase items cannot be empty")
     @Valid
     private List<PurchasesItemDto> purchaseItems;
-    private String totalAmount;
+    private double totalAmount;
 }

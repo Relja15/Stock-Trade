@@ -148,4 +148,11 @@ public class ViewController {
         model.addAttribute("products", productService.getProductListInJson());
         return "add-purchase-page";
     }
+
+    @GetMapping("/invoice-page")
+    public String showInvoicePage(Model model, Principal principal){
+        userService.getAllUsersDataInModel(model, principal.getName());
+        model.addAttribute("purchases", purchaseService.getAll());
+        return "invoice-page";
+    }
 }

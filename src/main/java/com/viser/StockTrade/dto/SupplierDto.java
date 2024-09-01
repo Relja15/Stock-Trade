@@ -2,8 +2,6 @@ package com.viser.StockTrade.dto;
 
 import com.viser.StockTrade.validation.BasicValidation;
 import com.viser.StockTrade.validation.ValidValue;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data

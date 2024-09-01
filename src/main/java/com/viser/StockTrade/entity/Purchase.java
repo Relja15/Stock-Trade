@@ -30,7 +30,7 @@ public class Purchase {
     private String supplierName;
 
     @Column(nullable = false)
-    private int totalAmount;
+    private double totalAmount;
 
     @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PurchaseItem> purchaseItems = new ArrayList<>();

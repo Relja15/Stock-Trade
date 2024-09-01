@@ -1,0 +1,202 @@
+<!-- Created with Jaspersoft Studio version 7.0.0.final using JasperReports Library version 7.0.0-b478feaa9aab4375eba71de77b4ca138ad2f62aa  -->
+<jasperReport name="Blank_A4_1" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2668b35d-fa4f-4f18-a89d-fae0212f40b1">
+	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Style1"/>
+	<dataset name="MyCollectionData" uuid="621bbd6e-217c-444f-ac88-23a96faac100">
+		<parameter name="totalAmount" class="java.lang.Double"/>
+		<query language="sql"><![CDATA[]]></query>
+		<field name="quantity" class="java.lang.Integer"/>
+		<field name="product" class="java.lang.String"/>
+		<field name="unitPrice" class="java.lang.Double"/>
+		<field name="lineTotal" class="java.lang.Double"/>
+		<variable name="lineTotalSum" calculation="Sum" class="java.lang.Double">
+			<expression><![CDATA[$F{lineTotal}]]></expression>
+		</variable>
+	</dataset>
+	<parameter name="date" class="java.time.LocalDate"/>
+	<parameter name="id" class="java.lang.Integer"/>
+	<parameter name="CollectionData" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+	<parameter name="supplier" class="java.lang.String"/>
+	<parameter name="supplierAddress" class="java.lang.String"/>
+	<parameter name="supplierEmail" class="java.lang.String"/>
+	<parameter name="supplierPhone" class="java.lang.String"/>
+	<query language="sql"><![CDATA[]]></query>
+	<background splitType="Stretch"/>
+	<title splitType="Stretch"/>
+	<pageHeader height="215" splitType="Stretch">
+		<element kind="rectangle" uuid="fec0766e-feb8-488f-8035-19bad8eddd32" x="18" y="50" width="510" height="1"/>
+		<element kind="textField" uuid="8f2750b8-dec9-494f-a900-b94beba299ca" x="428" y="60" width="60" height="20" fontName="Times New Roman" fontSize="10.0" hTextAlign="Center" vTextAlign="Middle">
+			<expression><![CDATA[$P{date}]]></expression>
+		</element>
+		<element kind="staticText" uuid="000316b2-ea7f-4538-be84-197d361eb329" x="388" y="80" width="60" height="20" fontName="Times New Roman" fontSize="10.0" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[Invoice #]]></text>
+		</element>
+		<element kind="textField" uuid="19da380b-097f-4c7c-a816-7a0ba193e057" x="427" y="80" width="60" height="20" fontName="Times New Roman" fontSize="10.0" hTextAlign="Center" vTextAlign="Middle">
+			<expression><![CDATA[$P{id}]]></expression>
+		</element>
+		<element kind="image" uuid="b55f3bc6-dfcd-43ee-b9c3-3b05578fe802" x="500" y="118" width="30" height="30">
+			<expression><![CDATA["D:/New folder/Fax/Stock-Trade/src/main/resources/static/img/logo.png"]]></expression>
+		</element>
+		<element kind="staticText" uuid="5ae07491-bcf3-45ac-af66-d5f692315414" x="388" y="60" width="60" height="20" fontName="Times New Roman" fontSize="10.0" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[Date:]]></text>
+		</element>
+		<element kind="rectangle" uuid="bb831942-7aa9-421a-8f8f-a1cbc992d630" x="20" y="110" width="510" height="1"/>
+		<element kind="textField" uuid="2117fb30-7292-4418-b5a9-a8b38923ca56" x="28" y="60" width="90" height="42" fontName="Times New Roman" fontSize="12.0" hTextAlign="Center" vTextAlign="Middle">
+			<expression><![CDATA[$P{supplier}]]></expression>
+		</element>
+		<element kind="textField" uuid="bfa54e79-274f-430d-8309-990f7b8ce0c0" x="20" y="120" width="50" height="19" fontName="Times New Roman" hTextAlign="Center" vTextAlign="Middle">
+			<expression><![CDATA["Supplier:"]]></expression>
+		</element>
+		<element kind="textField" uuid="d4a97b99-8b03-47f3-a1f1-47edf15cea91" x="70" y="120" width="109" height="19" fontName="Times New Roman" fontSize="10.0" hTextAlign="Center" vTextAlign="Middle">
+			<expression><![CDATA[$P{supplier}]]></expression>
+		</element>
+		<element kind="textField" uuid="476c8e0c-c09a-49e7-87e4-d2795f80905a" x="70" y="139" width="108" height="20" fontName="Times New Roman" hTextAlign="Center" vTextAlign="Middle">
+			<expression><![CDATA[$P{supplierAddress}]]></expression>
+		</element>
+		<element kind="textField" uuid="cb5ee816-652b-46a0-b9eb-e0e08943b047" x="70" y="159" width="108" height="20" fontName="Times New Roman" hTextAlign="Center" vTextAlign="Middle">
+			<expression><![CDATA[$P{supplierPhone}]]></expression>
+		</element>
+		<element kind="textField" uuid="1c58301e-21ca-4f66-a6f4-0e968a702a5e" x="70" y="179" width="108" height="19" fontName="Times New Roman" hTextAlign="Center" vTextAlign="Middle">
+			<expression><![CDATA[$P{supplierEmail}]]></expression>
+		</element>
+		<element kind="staticText" uuid="7d67079e-1211-427a-9e8b-3c7e37968dd3" x="342" y="124" width="50" height="19" fontName="Times New Roman" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[Customer:]]></text>
+		</element>
+		<element kind="staticText" uuid="33408b58-38b1-4b15-9719-735d2bbf93bf" x="392" y="124" width="108" height="19" fontName="Times New Roman" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[STOCK-TRADE]]></text>
+		</element>
+		<element kind="staticText" uuid="85194fff-0f31-4dcc-baea-eaf2acb86e88" x="392" y="143" width="108" height="30" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[Kneza Mihaila 33D, Arandjelovac, Srbija, 34300]]></text>
+		</element>
+		<element kind="textField" uuid="51fe32ec-25e4-4497-875e-88ef17ccf7de" x="392" y="192" width="108" height="19" fontName="Times New Roman" hTextAlign="Center" vTextAlign="Middle">
+			<expression><![CDATA["stocktrade@gmail.com"]]></expression>
+		</element>
+		<element kind="textField" uuid="23f77524-70b1-4c7c-b221-e65656198566" x="392" y="173" width="108" height="19" hTextAlign="Center" vTextAlign="Middle">
+			<expression><![CDATA[0652010241]]></expression>
+		</element>
+		<element kind="textField" uuid="ce3aff18-4b87-401d-a247-971b289e25d0" x="58" y="9" width="90" height="42" fontName="Times New Roman" fontSize="12.0" hTextAlign="Center" vTextAlign="Middle">
+			<expression><![CDATA[$P{supplier}]]></expression>
+		</element>
+		<element kind="staticText" uuid="6dbeaf2f-14f0-4183-91ec-f1ca11ce1263" x="428" y="20" width="100" height="30" forecolor="#52327A" fontName="Times New Roman" fontSize="20.0" hTextAlign="Center" vTextAlign="Middle">
+			<paragraph lineSpacingSize="0.0"/>
+			<text><![CDATA[INVOICE]]></text>
+		</element>
+		<element kind="image" uuid="b9b04b77-0433-4550-bedb-c359f06535a0" x="18" y="9" width="41" height="39">
+			<expression><![CDATA["C:/Users/Relja/Downloads/supplierLogo.jpg"]]></expression>
+		</element>
+	</pageHeader>
+	<columnHeader splitType="Stretch"/>
+	<detail>
+		<band height="154" splitType="Stretch">
+			<element kind="component" uuid="e013f368-afa1-4417-981b-b39e1c90927d" x="18" y="4" width="509" height="120" forecolor="#000003">
+				<component kind="table">
+					<datasetRun uuid="fe69978b-2d7f-423f-8648-9a717ba9ce32" subDataset="MyCollectionData">
+						<dataSourceExpression><![CDATA[$P{CollectionData}]]></dataSourceExpression>
+					</datasetRun>
+					<column kind="single" uuid="f5c7754b-1e8a-48fc-9b63-fc3df130ba82" width="80">
+						<columnHeader height="20" rowSpan="1" style="Table_CH">
+							<element kind="staticText" uuid="7b11df47-4421-46fa-8bae-8beb4c7ec3a3" x="0" y="0" width="80" height="20" forecolor="#030000" backcolor="#FFFFFF" fontName="Times New Roman" fontSize="10.0" hTextAlign="Center" vTextAlign="Middle">
+								<text><![CDATA[QTY]]></text>
+							</element>
+						</columnHeader>
+						<detailCell height="20" style="Table_TD">
+							<element kind="textField" uuid="2c65eda6-96e3-42c3-ae17-15f4a46c75be" x="0" y="0" width="80" height="20" fontName="Times New Roman" fontSize="10.0" hTextAlign="Center" vTextAlign="Middle">
+								<expression><![CDATA[$F{quantity}]]></expression>
+							</element>
+						</detailCell>
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
+					</column>
+					<column kind="single" uuid="ddca25c6-1cd9-46c0-a0ca-a5971684af0d" width="210">
+						<columnHeader height="20" rowSpan="1" style="Table_CH">
+							<element kind="staticText" uuid="e3ee675d-def7-4626-8f67-2280625bd2df" x="0" y="0" width="210" height="20" fontName="Times New Roman" fontSize="10.0" hTextAlign="Center" vTextAlign="Middle">
+								<text><![CDATA[PRODUCT]]></text>
+							</element>
+						</columnHeader>
+						<detailCell height="20" style="Table_TD">
+							<element kind="textField" uuid="285aa39e-bc9f-4173-b926-8daa2fe13622" x="0" y="0" width="210" height="20" fontName="Times New Roman" fontSize="10.0" hTextAlign="Center" vTextAlign="Middle">
+								<expression><![CDATA[$F{product}]]></expression>
+							</element>
+						</detailCell>
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
+					</column>
+					<column kind="single" uuid="c400bb8d-db50-4bc9-b905-e5729b6be986" width="110">
+						<columnHeader height="20" rowSpan="1" style="Table_CH">
+							<element kind="staticText" uuid="5cee3856-36a4-46c2-bf77-3f5f1a826111" x="0" y="0" width="110" height="20" fontName="Times New Roman" fontSize="10.0" hTextAlign="Center" vTextAlign="Middle">
+								<text><![CDATA[UNIT PRICE]]></text>
+							</element>
+						</columnHeader>
+						<columnFooter height="20" rowSpan="1" style="Table_CH">
+							<element kind="staticText" uuid="7b6c2d1d-1178-47c8-8401-1dae70bd83dc" x="0" y="0" width="110" height="20" fontName="Times New Roman" fontSize="10.0" hTextAlign="Center" vTextAlign="Middle">
+								<text><![CDATA[TOTAL]]></text>
+							</element>
+						</columnFooter>
+						<detailCell height="20" style="Table_TD">
+							<element kind="textField" uuid="0f8bc6d4-f587-4bfa-a955-b9c5e5b712f6" x="0" y="0" width="110" height="20" fontName="Times New Roman" fontSize="10.0" hTextAlign="Center" vTextAlign="Middle">
+								<expression><![CDATA[$F{unitPrice} + " €"]]></expression>
+							</element>
+						</detailCell>
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
+					</column>
+					<column kind="single" uuid="5236d00a-3937-430e-9139-a5db72d2076b" width="110">
+						<columnHeader height="20" rowSpan="1" style="Table_CH">
+							<element kind="staticText" uuid="870c231d-900d-4c17-a542-494c83c6a543" x="0" y="0" width="110" height="20" fontName="Times New Roman" fontSize="10.0" hTextAlign="Center" vTextAlign="Middle">
+								<text><![CDATA[LINE TOTAL]]></text>
+							</element>
+						</columnHeader>
+						<columnFooter height="20" rowSpan="1" style="Table_CH">
+							<element kind="textField" uuid="aeb0cfc9-bf78-4aeb-9c25-c94bb0b79438" x="0" y="0" width="110" height="20" fontName="Times New Roman" hTextAlign="Center" vTextAlign="Middle">
+								<expression><![CDATA[$V{lineTotalSum} + " €"]]></expression>
+							</element>
+						</columnFooter>
+						<detailCell height="20" style="Table_TD">
+							<element kind="textField" uuid="9eef8945-85ee-4e84-90eb-49be3f9688fc" x="0" y="0" width="110" height="20" fontName="Times New Roman" fontSize="10.0" hTextAlign="Center" vTextAlign="Middle">
+								<expression><![CDATA[$F{lineTotal} + " €"]]></expression>
+							</element>
+						</detailCell>
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
+					</column>
+				</component>
+				<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+				<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
+				<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
+				<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
+			</element>
+		</band>
+	</detail>
+	<columnFooter splitType="Stretch"/>
+	<pageFooter height="54" splitType="Stretch">
+		<element kind="staticText" uuid="16ffa19a-ba0a-49ca-91e6-70f0146433eb" positionType="Float" mode="Opaque" x="18" y="30" width="510" height="19" backcolor="#E6E8E9" fontName="Serif" fontSize="9.0" italic="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[THANKYOU FOR YOUR BUSINESS]]></text>
+		</element>
+		<element kind="staticText" uuid="e8038c99-2d3d-43ff-92c5-a7badf3e1f01" x="18" y="0" width="510" height="30" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[This invoice has been issued in accordance with applicable laws and regulations. Please make the payment within 30 days.]]></text>
+		</element>
+	</pageFooter>
+	<summary height="1" splitType="Stretch"/>
+</jasperReport>

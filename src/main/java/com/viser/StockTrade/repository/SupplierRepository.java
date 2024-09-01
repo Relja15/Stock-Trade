@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 public interface SupplierRepository extends JpaRepository<Supplier, Integer> {
     Supplier findById(int id);
 
+    Supplier findByName(String name);
+
     boolean existsByName(String name);
 
     long count();

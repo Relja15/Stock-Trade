@@ -19,11 +19,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PurchaseService {
     private final PurchaseRepository repo;
-    private final SupplierService supplierService;
     private final ProductService productService;
 
     public List<Purchase> getAll() {
         return repo.findAll();
+    }
+
+    public Purchase getById(int id){
+        return repo.findById(id);
     }
 
     public void add(PurchaseDto purchaseDto, BindingResult result) throws ValidationException {
@@ -35,12 +38,12 @@ public class PurchaseService {
     }
 
     public PurchaseDto getPurchaseInDto(int id) {
-        Purchase purchase = repo.findById(id);
+        Purchase purchase = getById(id);
         PurchaseDto purchaseDto = new PurchaseDto();
         purchaseDto.setId(purchase.getId());
         purchaseDto.setSupplier(purchase.getSupplierName());
         purchaseDto.setDate(purchase.getDate());
-        purchaseDto.setTotalAmount(String.valueOf(purchase.getTotalAmount()));
+        purchaseDto.setTotalAmount(purchase.getTotalAmount());
         purchaseDto.setPurchaseItems(purchase.getPurchaseItems().stream()
                 .map(item -> new PurchasesItemDto(item.getProductName(), item.getQuantity(), item.getPrice()))
                 .collect(Collectors.toList()));
@@ -59,7 +62,7 @@ public class PurchaseService {
     private void updatePurchaseFields(Purchase purchase, PurchaseDto purchaseDto) {
         purchase.setSupplierName(purchaseDto.getSupplier());
         purchase.setDate(purchaseDto.getDate());
-        purchase.setTotalAmount(Integer.parseInt(purchaseDto.getTotalAmount()));
+        purchase.setTotalAmount(purchaseDto.getTotalAmount());
 
         List<PurchaseItem> purchaseItems = purchaseDto.getPurchaseItems().stream().map(dto -> {
             PurchaseItem item = new PurchaseItem();

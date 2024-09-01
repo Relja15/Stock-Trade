@@ -136,9 +136,9 @@
         </li><!-- End Users Page Nav -->
 
         <li class="nav-item">
-            <a class="nav-link collapsed" th:href="@{/pages-blank}">
+            <a class="nav-link collapsed" th:href="@{/invoice-page}">
                 <i class="bi bi-file-earmark"></i>
-                <span>Report</span>
+                <span>Invoice</span>
             </a>
         </li><!-- End Report Page Nav -->
 
@@ -189,7 +189,7 @@
                             <tbody>
                             <tr th:each="product : ${products}">
                                 <td class="product-name" th:text="${product.getName()}"></td>
-                                <td class="product-price" th:text="${product.getPrice()}"></td>
+                                <td class="product-price" th:text="${product.getPrice()} + ' €'"></td>
                                 <td class="product-quantity" th:text="${product.getStockQuantity()}"></td>
                                 <td class="product-category" th:text="${product.getCategory().getName()}"></td>
                                 <td class="product-supplier" th:text="${product.getSupplier().getName()}"></td>

@@ -40,6 +40,7 @@ public class SecurityConstants {
             "/add-product-page",
             "/edit-product-page",
             "/add-purchase-page",
-            "/api/charts/**"
+            "/api/charts/**",
+            "/invoice-page"
     };
 }

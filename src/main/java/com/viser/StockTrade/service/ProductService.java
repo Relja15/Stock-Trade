@@ -97,33 +97,12 @@ public class ProductService {
     }
 
     private void updateProductFields(Product product, ProductDto productDto) {
-        product.setName(getNonEmptyString(productDto.getName(), product.getName()));
-        product.setPrice(getNonEmptyInt(getStringFromDtoToInt(productDto.getPrice()), product.getPrice()));
-        product.setStockQuantity(getNonEmptyInt(getStringFromDtoToInt(productDto.getStockQty()), product.getStockQuantity()));
-        product.setCategory(getNonEmptyCategory(categoryService.getById(getStringFromDtoToInt(productDto.getCategoryId())), product.getCategory()));
-        product.setSupplier(getNonEmptySupplier(supplierService.getById(getStringFromDtoToInt(productDto.getSupplierId())), product.getSupplier()));
+        product.setName(ValueUtilityService.getNonEmptyValue(productDto.getName(), product.getName()));
+        product.setPrice(ValueUtilityService.getNonEmptyValue(ValueUtilityService.getStringFromDtoToDouble(productDto.getPrice()), product.getPrice()));
+        product.setStockQuantity(ValueUtilityService.getNonEmptyValue(ValueUtilityService.getStringFromDtoToInt(productDto.getStockQty()), product.getStockQuantity()));
+        product.setCategory(ValueUtilityService.getNonEmptyValue(categoryService.getById(ValueUtilityService.getStringFromDtoToInt(productDto.getCategoryId())), product.getCategory()));
+        product.setSupplier(ValueUtilityService.getNonEmptyValue(supplierService.getById(ValueUtilityService.getStringFromDtoToInt(productDto.getSupplierId())), product.getSupplier()));
     }
-
-    private String getNonEmptyString(String newValue, String oldValue) {
-        return (newValue != null && !newValue.isEmpty()) ? newValue : oldValue;
-    }
-
-    private int getNonEmptyInt(int newValue, int oldValue) {
-        return newValue != 0 ? newValue : oldValue;
-    }
-
-    private Category getNonEmptyCategory(Category newValue, Category oldValue) {
-        return newValue != null ? newValue : oldValue;
-    }
-
-    private Supplier getNonEmptySupplier(Supplier newValue, Supplier oldValue) {
-        return newValue != null ? newValue : oldValue;
-    }
-
-    private int getStringFromDtoToInt(String stringFromDto){
-        return !stringFromDto.isEmpty() ? Integer.parseInt(stringFromDto) : 0;
-    }
-
     public String getProductListInJson() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(getAll());

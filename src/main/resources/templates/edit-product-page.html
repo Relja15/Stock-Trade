@@ -137,9 +137,9 @@
         </li><!-- End Users Page Nav -->
 
         <li class="nav-item">
-            <a class="nav-link collapsed" th:href="@{/pages-blank}">
+            <a class="nav-link collapsed" th:href="@{/invoice-page}">
                 <i class="bi bi-file-earmark"></i>
-                <span>Report</span>
+                <span>Invoice</span>
             </a>
         </li><!-- End Report Page Nav -->
 
@@ -172,7 +172,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="price" class="form-label">Price:</label>
-                    <input type="number" id="price" name="price" class="form-control"
+                    <input type="number" id="price" name="price" step="0.01" min="0" class="form-control"
                            th:placeholder="${product.getPrice() != null ? product.getPrice() : 'Enter product price'}"/>
                 </div>
                 <div class="mb-3">
