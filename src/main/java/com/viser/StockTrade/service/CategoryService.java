@@ -14,9 +14,18 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
+    //todo throw exception from database
     private final CategoryRepository repo;
     private final ProductService productService;
     private final FileService fileService;
+
+    public void save(Category category){
+        repo.save(category);
+    }
+
+    public void deleteById(int id){
+        repo.deleteById(id);
+    }
 
     public List<Category> getAll() {
         return repo.findAll();
@@ -46,7 +55,7 @@ public class CategoryService {
         Category category = new Category();
         updateCategoryFields(category, categoryDto);
         handleCategoryIcon(category, categoryDto);
-        repo.save(category);
+        save(category);
     }
 
     public void delete(int id) throws NotFoundException, ForeignKeyConstraintViolationException, IOException {
@@ -57,7 +66,7 @@ public class CategoryService {
             throw new ForeignKeyConstraintViolationException("The category cannot be deleted because it has associated products.", "/category-page");
         }
         fileService.deleteFile(getById(id).getIcon());
-        repo.deleteById(id);
+        deleteById(id);
     }
 
     public void edit(int id, CategoryDto categoryDto, BindingResult result) throws ValidationException, NotFoundException, NameExistException, IOException {
@@ -66,12 +75,12 @@ public class CategoryService {
         if (category == null) {
             throw new NotFoundException("Could not find any category with ID" + id, "/edit-category-page/" + id);
         }
-        if (category.getName().equals(categoryDto.getName()) && existByName(categoryDto.getName())) {
+        if (!category.getName().equals(categoryDto.getName()) && existByName(categoryDto.getName())) {
             throw new NameExistException("A category with this name already exists. Please choose a different name.", "/edit-category-page/" + id);
         }
         updateCategoryFields(category, categoryDto);
         handleCategoryIcon(category, categoryDto);
-        repo.save(category);
+        save(category);
     }
 
     private Category findCategoryById(int id) {
@@ -79,8 +88,8 @@ public class CategoryService {
     }
 
     private void updateCategoryFields(Category category, CategoryDto categoryDto) {
-        category.setName(getNonEmptyValue(categoryDto.getName(), category.getName()));
-        category.setDescription(getNonEmptyValue(categoryDto.getDescription(), category.getDescription()));
+        category.setName(categoryDto.getName());
+        category.setDescription(categoryDto.getDescription());
     }
 
     private void handleCategoryIcon(Category category, CategoryDto categoryDto) throws IOException {
@@ -96,9 +105,5 @@ public class CategoryService {
         if (category.getIcon() != null && !category.getIcon().isEmpty()) {
             fileService.deleteFile(category.getIcon());
         }
-    }
-
-    private String getNonEmptyValue(String newValue, String oldValue) {
-        return (newValue != null && !newValue.isEmpty()) ? newValue : oldValue;
     }
 }

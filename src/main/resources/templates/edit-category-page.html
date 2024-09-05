@@ -171,11 +171,11 @@
             </div>
             <div class="mb-3">
                 <label for="name" class="form-label">Name:</label>
-                <input type="text" id="name" name="name" class="form-control" th:placeholder="${category.getName() != null ? category.getName() : 'Enter category name'}"/>
+                <input type="text" id="name" name="name" class="form-control" th:value="${category.getName() != null ? category.getName() : ''}" th:placeholder="${category.getName() != null ? '' : 'Enter category name'}" required/>
             </div>
             <div class="mb-3">
                 <label for="description" class="form-label">Description:</label>
-                <input type="text" id="description" name="description" class="form-control" th:placeholder="${category.getDescription() != null ? category.getDescription() : 'Enter category description'}"/>
+                <input type="text" id="description" name="description" class="form-control" th:value="${category.getDescription() != null ? category.getDescription() : ''}" th:placeholder="${category.getDescription() != null ? '' : 'Enter category description'}" required/>
             </div>
             <button type="submit" class="btn btn-primary">Save Changes</button>
         </form>

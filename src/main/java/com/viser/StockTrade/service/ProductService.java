@@ -3,9 +3,7 @@ package com.viser.StockTrade.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.viser.StockTrade.dto.ProductDto;
-import com.viser.StockTrade.entity.Category;
 import com.viser.StockTrade.entity.Product;
-import com.viser.StockTrade.entity.Supplier;
 import com.viser.StockTrade.exceptions.ExceptionHelper;
 import com.viser.StockTrade.exceptions.NameExistException;
 import com.viser.StockTrade.exceptions.NotFoundException;
@@ -30,8 +28,12 @@ public class ProductService {
     @Autowired
     private SupplierService supplierService;
 
-    public void save(Product product){
+    public void save(Product product) {
         repo.save(product);
+    }
+
+    public void deleteById(int id) {
+        repo.deleteById(id);
     }
 
     public List<Product> getAll() {
@@ -42,7 +44,7 @@ public class ProductService {
         return repo.findById(id);
     }
 
-    public Product getByName(String name){
+    public Product getByName(String name) {
         return repo.findByName(name);
     }
 
@@ -50,7 +52,7 @@ public class ProductService {
         return repo.existsByName(name);
     }
 
-    public boolean existById(int id){
+    public boolean existById(int id) {
         return repo.existsById(id);
     }
 
@@ -62,7 +64,7 @@ public class ProductService {
         return repo.existsBySupplierId(id);
     }
 
-    public  long countAll(){
+    public long countAll() {
         return repo.count();
     }
 
@@ -77,10 +79,10 @@ public class ProductService {
     }
 
     public void delete(int id) throws NotFoundException {
-        if(!existById(id)){
+        if (!existById(id)) {
             throw new NotFoundException("Could not find any customer with ID " + id, "/product-page");
         }
-        repo.deleteById(id);
+        deleteById(id);
     }
 
     public void edit(int id, ProductDto productDto, BindingResult result) throws ValidationException, NotFoundException, NameExistException {
@@ -89,7 +91,7 @@ public class ProductService {
         if (product == null) {
             throw new NotFoundException("Could not find any product with ID" + id, "/edit-product-page/" + id);
         }
-        if(product.getName().equals(productDto.getName()) && existByName(productDto.getName())){
+        if (!product.getName().equals(productDto.getName()) && existByName(productDto.getName())) {
             throw new NameExistException("A product with this name already exists. Please choose a different name.", "/edit-product-page/" + id);
         }
         updateProductFields(product, productDto);
@@ -97,12 +99,13 @@ public class ProductService {
     }
 
     private void updateProductFields(Product product, ProductDto productDto) {
-        product.setName(ValueUtilityService.getNonEmptyValue(productDto.getName(), product.getName()));
-        product.setPrice(ValueUtilityService.getNonEmptyValue(ValueUtilityService.getStringFromDtoToDouble(productDto.getPrice()), product.getPrice()));
-        product.setStockQuantity(ValueUtilityService.getNonEmptyValue(ValueUtilityService.getStringFromDtoToInt(productDto.getStockQty()), product.getStockQuantity()));
-        product.setCategory(ValueUtilityService.getNonEmptyValue(categoryService.getById(ValueUtilityService.getStringFromDtoToInt(productDto.getCategoryId())), product.getCategory()));
-        product.setSupplier(ValueUtilityService.getNonEmptyValue(supplierService.getById(ValueUtilityService.getStringFromDtoToInt(productDto.getSupplierId())), product.getSupplier()));
+        product.setName(productDto.getName());
+        product.setPrice(productDto.getPrice());
+        product.setStockQuantity(productDto.getStockQty());
+        product.setCategory(categoryService.getById(productDto.getCategoryId()));
+        product.setSupplier(supplierService.getById(productDto.getSupplierId()));
     }
+
     public String getProductListInJson() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(getAll());

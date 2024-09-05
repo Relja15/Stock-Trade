@@ -7,8 +7,8 @@ import lombok.Data;
 public class ProductDto {
     @BasicValidation(message = "Name must be at least {minLength} characters long and cannot be just spaces.")
     private String name;
-    private String price;
-    private String stockQty;
-    private String categoryId;
-    private String supplierId;
+    private double price;
+    private int stockQty;
+    private int categoryId;
+    private int supplierId;
 }

@@ -21,6 +21,10 @@ public class PurchaseService {
     private final PurchaseRepository repo;
     private final ProductService productService;
 
+    public void save(Purchase purchase){
+        repo.save(purchase);
+    }
+
     public List<Purchase> getAll() {
         return repo.findAll();
     }
@@ -34,7 +38,7 @@ public class PurchaseService {
         Purchase purchase = new Purchase();
         updatePurchaseFields(purchase, purchaseDto);
         updateQuantityInProduct(purchase.getPurchaseItems());
-        repo.save(purchase);
+        save(purchase);
     }
 
     public PurchaseDto getPurchaseInDto(int id) {

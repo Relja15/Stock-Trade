@@ -100,15 +100,15 @@
 		<element kind="textField" uuid="23f77524-70b1-4c7c-b221-e65656198566" x="392" y="173" width="108" height="19" hTextAlign="Center" vTextAlign="Middle">
 			<expression><![CDATA[0652010241]]></expression>
 		</element>
-		<element kind="textField" uuid="ce3aff18-4b87-401d-a247-971b289e25d0" x="58" y="9" width="90" height="42" fontName="Times New Roman" fontSize="12.0" hTextAlign="Center" vTextAlign="Middle">
+		<element kind="textField" uuid="ce3aff18-4b87-401d-a247-971b289e25d0" x="50" y="9" width="90" height="42" fontName="Times New Roman" fontSize="12.0" hTextAlign="Center" vTextAlign="Middle">
 			<expression><![CDATA[$P{supplier}]]></expression>
 		</element>
 		<element kind="staticText" uuid="6dbeaf2f-14f0-4183-91ec-f1ca11ce1263" x="428" y="20" width="100" height="30" forecolor="#52327A" fontName="Times New Roman" fontSize="20.0" hTextAlign="Center" vTextAlign="Middle">
 			<paragraph lineSpacingSize="0.0"/>
 			<text><![CDATA[INVOICE]]></text>
 		</element>
-		<element kind="image" uuid="b9b04b77-0433-4550-bedb-c359f06535a0" x="18" y="9" width="41" height="39">
-			<expression><![CDATA["C:/Users/Relja/Downloads/supplierLogo.jpg"]]></expression>
+		<element kind="image" uuid="24f103eb-a145-4e82-af02-cf665ccace2b" x="18" y="10" width="38" height="40">
+			<expression><![CDATA["D:/New folder/Fax/Stock-Trade/src/main/resources/static/img/supplierLogo.jpg"]]></expression>
 		</element>
 	</pageHeader>
 	<columnHeader splitType="Stretch"/>

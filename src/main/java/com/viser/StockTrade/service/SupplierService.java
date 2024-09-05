@@ -16,6 +16,14 @@ public class SupplierService {
     private final SupplierRepository repo;
     private final ProductService productService;
 
+    public void save(Supplier supplier){
+        repo.save(supplier);
+    }
+
+    public void deleteById(int id){
+        repo.deleteById(id);
+    }
+
     public List<Supplier> getAll(){
         return repo.findAll();
     }
@@ -47,7 +55,7 @@ public class SupplierService {
         }
         Supplier supplier = new Supplier();
         updateSupplierFields(supplier, supplierDto);
-        repo.save(supplier);
+        save(supplier);
     }
 
     public void delete(int id) throws NotFoundException, ForeignKeyConstraintViolationException {
@@ -57,7 +65,7 @@ public class SupplierService {
         if(productService.existBySupplierId(id)){
             throw new ForeignKeyConstraintViolationException("The supplier cannot be deleted because it has associated products.", "/supplier-page");
         }
-        repo.deleteById(id);
+        deleteById(id);
     }
 
     public void edit(int id, SupplierDto supplierDto, BindingResult result) throws ValidationException, NotFoundException, NameExistException {
@@ -66,21 +74,17 @@ public class SupplierService {
         if(supplier == null){
             throw new NotFoundException("Could not find any supplier with ID" + id, "/edit-supplier-page/" + id);
         }
-        if(supplier.getName().equals(supplierDto.getName()) && existByName(supplierDto.getName())){
+        if(!supplier.getName().equals(supplierDto.getName()) && existByName(supplierDto.getName())){
             throw new NameExistException("A supplier with this name already exists. Please choose a different name.", "/edit-supplier-page/" + id);
         }
         updateSupplierFields(supplier, supplierDto);
-        repo.save(supplier);
+        save(supplier);
     }
 
     private void updateSupplierFields(Supplier supplier, SupplierDto supplierDto) {
-        supplier.setName(getNonEmptyValue(supplierDto.getName(), supplier.getName()));
-        supplier.setAddress(getNonEmptyValue(supplierDto.getAddress(), supplier.getAddress()));
-        supplier.setEmail(getNonEmptyValue(supplierDto.getEmail(), supplier.getEmail()));
-        supplier.setPhone(getNonEmptyValue(supplierDto.getPhone(), supplier.getPhone()));
-    }
-
-    private String getNonEmptyValue(String newValue, String oldValue) {
-        return (newValue != null && !newValue.isEmpty()) ? newValue : oldValue;
+        supplier.setName(supplierDto.getName());
+        supplier.setAddress(supplierDto.getAddress());
+        supplier.setEmail(supplierDto.getEmail());
+        supplier.setPhone(supplierDto.getPhone());
     }
 }

@@ -41,6 +41,10 @@ public class UserService {
         repo.save(user);
     }
 
+    public void deleteById(int id){
+        repo.deleteById(id);
+    }
+
     public User getByUsername(String username) {
         return repo.findByUsername(username);
     }
@@ -68,8 +72,8 @@ public class UserService {
         if (userProfile.getProfilePictureUrl() != null) {
             fileService.deleteFile(userProfile.getProfilePictureUrl());
         }
-        repo.findById(id).getRoles().clear();
-        repo.deleteById(id);
+        getById(id).getRoles().clear();
+        deleteById(id);
     }
 
     public void edit(int id, UserDto userDto, BindingResult result) throws ValidationException, NotFoundException, NameExistException{
@@ -78,19 +82,15 @@ public class UserService {
         if (user == null) {
             throw new NotFoundException("Could not find any user with ID " + id, "/edit-user-page/" + id);
         }
-        if(user.getUsername().equals(userDto.getUsername()) && existByUsername(userDto.getUsername())) {
+        if(!user.getUsername().equals(userDto.getUsername()) && existByUsername(userDto.getUsername())) {
             throw new NameExistException("A user with this username already exists. Please choose a different username.", "/edit-user-page/" + id);
         }
         updateUserFields(user, userDto);
-        repo.save(user);
+        save(user);
     }
 
     private void updateUserFields(User user, UserDto userDto) {
-        user.setUsername(getNonEmptyValue(userDto.getUsername(), user.getUsername()));
-        user.setPassword(passwordEncoder.encode(getNonEmptyValue(userDto.getPassword(), user.getPassword())));
-    }
-
-    private String getNonEmptyValue(String newValue, String oldValue) {
-        return (newValue != null && !newValue.isEmpty()) ? newValue : oldValue;
+        user.setUsername(userDto.getUsername());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
     }
 }

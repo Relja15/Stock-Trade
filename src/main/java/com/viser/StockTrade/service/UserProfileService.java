@@ -28,35 +28,18 @@ public class UserProfileService {
         repo.save(userProfile);
     }
 
-    public UserProfile getUserProfileByUsername(String username) {
-        User user = userService.getByUsername(username);
-        if (user != null) {
-            return repo.findByUserId(user.getId());
-        }
-        return null;
-    }
-
-
     public void delete(UserProfile userProfile) {
         repo.delete(userProfile);
     }
 
     public void updateUserProfile(UserProfileDto userProfileDto, String username, BindingResult result) throws ValidationException, IOException {
         ExceptionHelper.throwValidationException(result, "/edit-profile");
-        User user = getUserByUsername(username);
+        User user = userService.getByUsername(username);
         UserProfile userProfile = getUserProfileByUserId(user.getId());
         updateUserProfileFields(userProfileDto, userProfile);
         handleProfilePicture(userProfileDto, userProfile, user.getId());
 
-        repo.save(userProfile);
-    }
-
-    private User getUserByUsername(String username) {
-        User user = userService.getByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("Username not found");
-        }
-        return user;
+        save(userProfile);
     }
 
     public UserProfile getUserProfileByUserId(int userId) {
@@ -64,15 +47,11 @@ public class UserProfileService {
     }
 
     private void updateUserProfileFields(UserProfileDto userProfileDto, UserProfile userProfile) {
-        userProfile.setFirstName(getNonEmptyValue(userProfileDto.getFirstName(), userProfile.getFirstName()));
-        userProfile.setLastName(getNonEmptyValue(userProfileDto.getLastName(), userProfile.getLastName()));
-        userProfile.setAddress(getNonEmptyValue(userProfileDto.getAddress(), userProfile.getAddress()));
+        userProfile.setFirstName(userProfileDto.getFirstName());
+        userProfile.setLastName(userProfileDto.getLastName());
+        userProfile.setAddress(userProfileDto.getAddress());
         userProfile.setGender(userProfileDto.getGender());
-        userProfile.setDateOfBirth(userProfileDto.getDateOfBirth() != null ? userProfileDto.getDateOfBirth() : userProfile.getDateOfBirth());
-    }
-
-    private String getNonEmptyValue(String newValue, String oldValue) {
-        return (newValue != null && !newValue.isEmpty()) ? newValue : oldValue;
+        userProfile.setDateOfBirth(userProfileDto.getDateOfBirth());
     }
 
     private void handleProfilePicture(UserProfileDto userProfileDto, UserProfile userProfile, int userId) throws IOException {
