@@ -22,7 +22,6 @@ import java.io.IOException;
 public class CategoryController {
     private final CategoryService categoryService;
 
-    @Transactional
     @PostMapping("/add")
     public String add(@Valid @ModelAttribute CategoryDto categoryDto, BindingResult result, RedirectAttributes ra) throws ValidationException, NameExistException, IOException {
         categoryService.add(categoryDto, result);
@@ -30,7 +29,6 @@ public class CategoryController {
         return "redirect:/category-page";
     }
 
-    @Transactional
     @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable("id") Integer id, RedirectAttributes ra) throws NotFoundException, ForeignKeyConstraintViolationException, IOException {
         categoryService.delete(id);
@@ -38,7 +36,6 @@ public class CategoryController {
         return "redirect:/category-page";
     }
 
-    @Transactional
     @PostMapping("/edit/{id}")
     public String edit(@PathVariable("id") Integer id, @Valid @ModelAttribute CategoryDto categoryDto, BindingResult result, RedirectAttributes ra) throws ValidationException, NotFoundException, NameExistException, IOException {
         categoryService.edit(id, categoryDto, result);

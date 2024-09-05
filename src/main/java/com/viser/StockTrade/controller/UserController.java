@@ -22,7 +22,6 @@ public class UserController {
     private final UserService userService;
 
 
-    @Transactional
     @DeleteMapping("/delete/{id}")
     public String deleteUser(@PathVariable("id") Integer id, RedirectAttributes ra) throws NotFoundException, IOException {
         userService.delete(id);
@@ -30,7 +29,6 @@ public class UserController {
         return "redirect:/users-page";
     }
 
-    @Transactional
     @PostMapping("/edit/{id}")
     public String editUser(@PathVariable("id") Integer id, @Valid @ModelAttribute UserDto userDto, BindingResult result, RedirectAttributes ra) throws ValidationException, NotFoundException, NameExistException {
         userService.edit(id, userDto, result);

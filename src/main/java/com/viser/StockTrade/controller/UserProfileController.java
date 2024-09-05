@@ -22,7 +22,6 @@ import java.security.Principal;
 public class UserProfileController {
     private final UserProfileService userProfileService;
 
-    @Transactional
     @PostMapping("/update")
     public String updateUserProfile(@Valid @ModelAttribute UserProfileDto userProfileDto, BindingResult result, Principal principal, RedirectAttributes ra) throws ValidationException, IOException {
         userProfileService.updateUserProfile(userProfileDto, principal.getName(), result);

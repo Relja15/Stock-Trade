@@ -20,7 +20,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class SupplierController {
     private final SupplierService supplierService;
 
-    @Transactional
     @PostMapping("/add")
     public String add(@Valid @ModelAttribute SupplierDto supplierDto, BindingResult result, RedirectAttributes ra) throws ValidationException, NameExistException {
         supplierService.add(supplierDto, result);
@@ -28,7 +27,6 @@ public class SupplierController {
         return "redirect:/supplier-page";
     }
 
-    @Transactional
     @DeleteMapping("delete/{id}")
     public String delete(@PathVariable("id") Integer id, RedirectAttributes ra) throws NotFoundException, ForeignKeyConstraintViolationException {
         supplierService.delete(id);
@@ -36,7 +34,6 @@ public class SupplierController {
         return "redirect:/supplier-page";
     }
 
-    @Transactional
     @PostMapping("/edit/{id}")
     public String edit(@PathVariable("id") Integer id, @Valid @ModelAttribute SupplierDto supplierDto, BindingResult result, RedirectAttributes ra) throws ValidationException, NotFoundException, NameExistException {
         supplierService.edit(id, supplierDto, result);

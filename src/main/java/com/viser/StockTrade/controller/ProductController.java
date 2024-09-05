@@ -19,7 +19,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class ProductController {
     private final ProductService productService;
 
-    @Transactional
     @PostMapping("/add")
     public String add(@Valid @ModelAttribute ProductDto productDto, BindingResult result, RedirectAttributes ra) throws ValidationException, NameExistException {
         productService.add(productDto, result);
@@ -27,7 +26,6 @@ public class ProductController {
         return "redirect:/product-page";
     }
 
-    @Transactional
     @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable("id") Integer id, RedirectAttributes ra) throws NotFoundException {
         productService.delete(id);
@@ -35,7 +33,6 @@ public class ProductController {
         return "redirect:/product-page";
     }
 
-    @Transactional
     @PostMapping("/edit/{id}")
     public String edit(@PathVariable("id") Integer id, @Valid @ModelAttribute ProductDto productDto, BindingResult result, RedirectAttributes ra) throws ValidationException, NotFoundException, NameExistException {
         productService.edit(id, productDto, result);

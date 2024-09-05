@@ -28,7 +28,6 @@ public class AuthController {
         return "redirect:/index";
     }
 
-    @Transactional
     @PostMapping("/register")
     public String register(@Valid @ModelAttribute UserDto userDto, BindingResult result, RedirectAttributes ra) throws ValidationException, NameExistException {
         authService.register(userDto, result);

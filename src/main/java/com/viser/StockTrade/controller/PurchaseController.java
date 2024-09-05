@@ -18,8 +18,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class PurchaseController {
     private final PurchaseService purchaseService;
 
-    @PostMapping("/add")
     @Transactional
+    @PostMapping("/add")
     public String add(@Valid @ModelAttribute PurchaseDto purchaseDto, BindingResult result, RedirectAttributes ra) throws ValidationException {
         purchaseService.add(purchaseDto, result);
         ra.addFlashAttribute("success", "Purchase saved successfully.");
