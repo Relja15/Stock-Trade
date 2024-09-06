@@ -46,8 +46,10 @@
             <li class="nav-item dropdown pe-3">
 
                 <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                    <img th:src="${userProfile.getProfilePictureUrl() != null ? userProfile.getProfilePictureUrl() : '/img/defaultProfileImg.png'}" alt="Profile" class="rounded-circle">
-                    <span class="d-none d-md-block dropdown-toggle ps-2" th:text="${userProfile.getFirstName() != null && userProfile.getLastName() != null ? userProfile.getFirstName() + ' ' + userProfile.getLastName().substring(0, 1) + '.' : username}"></span>
+                    <img th:src="${userProfile.getProfilePictureUrl() != null ? userProfile.getProfilePictureUrl() : '/img/defaultProfileImg.png'}"
+                         alt="Profile" class="rounded-circle">
+                    <span class="d-none d-md-block dropdown-toggle ps-2"
+                          th:text="${userProfile.getFirstName() != null && userProfile.getLastName() != null ? userProfile.getFirstName() + ' ' + userProfile.getLastName().substring(0, 1) + '.' : username}"></span>
                 </a><!-- End Profile Iamge Icon -->
 
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
@@ -191,11 +193,16 @@
                                 <td class="supplier-phone" th:text="${supplier.getPhone()}"></td>
                                 <td class="action-buttons">
                                     <!-- Edit Button -->
-                                    <a th:href="@{/edit-supplier-page/{id}(id=${supplier.id})}" class="btn btn-outline-primary data-btn" role="button">Edit</a>
+                                    <a th:href="@{/edit-supplier-page/{id}(id=${supplier.id})}"
+                                       class="btn btn-outline-primary data-btn" role="button">Edit</a>
                                     <!-- Delete Button -->
-                                    <form th:action="@{/api/supplier/delete/{id}(id=${supplier.id})}" method="post" style="display:inline;">
+                                    <form th:action="@{/api/supplier/delete/{id}(id=${supplier.id})}" method="post"
+                                          style="display:inline;">
                                         <input type="hidden" name="_method" value="delete"/>
-                                        <button type="submit" class="btn btn-outline-primary data-btn" onclick="return confirm('Are you sure you want to delete this supplier?');">Delete</button>
+                                        <button type="submit" class="btn btn-outline-primary data-btn"
+                                                onclick="return confirm('Are you sure you want to delete this supplier?');">
+                                            Delete
+                                        </button>
                                     </form>
                                 </td>
                             </tr>

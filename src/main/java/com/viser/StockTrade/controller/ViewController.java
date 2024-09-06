@@ -150,7 +150,7 @@ public class ViewController {
     }
 
     @GetMapping("/invoice-page")
-    public String showInvoicePage(Model model, Principal principal){
+    public String showInvoicePage(Model model, Principal principal) {
         userService.getAllUsersDataInModel(model, principal.getName());
         model.addAttribute("purchases", purchaseService.getAll());
         return "invoice-page";

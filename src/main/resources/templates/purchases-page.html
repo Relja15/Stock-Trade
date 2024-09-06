@@ -46,8 +46,10 @@
             <li class="nav-item dropdown pe-3">
 
                 <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                    <img th:src="${userProfile.getProfilePictureUrl() != null ? userProfile.getProfilePictureUrl() : '/img/defaultProfileImg.png'}" alt="Profile" class="rounded-circle">
-                    <span class="d-none d-md-block dropdown-toggle ps-2" th:text="${userProfile.getFirstName() != null && userProfile.getLastName() != null ? userProfile.getFirstName() + ' ' + userProfile.getLastName().substring(0, 1) + '.' : username}"></span>
+                    <img th:src="${userProfile.getProfilePictureUrl() != null ? userProfile.getProfilePictureUrl() : '/img/defaultProfileImg.png'}"
+                         alt="Profile" class="rounded-circle">
+                    <span class="d-none d-md-block dropdown-toggle ps-2"
+                          th:text="${userProfile.getFirstName() != null && userProfile.getLastName() != null ? userProfile.getFirstName() + ' ' + userProfile.getLastName().substring(0, 1) + '.' : username}"></span>
                 </a><!-- End Profile Iamge Icon -->
 
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
@@ -241,13 +243,10 @@
     </div>
 
 
-
 </main><!-- End #main -->
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
         class="bi bi-arrow-up-short"></i></a>
-
-
 
 
 <!-- Vendor JS Files -->

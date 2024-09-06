@@ -19,7 +19,7 @@ public class PurchaseItemService {
         return repo.sumQuantityByProduct();
     }
 
-    public List<Object[]> sumQuantotyBySupplier(){
+    public List<Object[]> sumQuantotyBySupplier() {
         return repo.sumQuantotyBySupplier();
     }
 }

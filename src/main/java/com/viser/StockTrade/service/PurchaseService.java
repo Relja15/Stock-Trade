@@ -5,7 +5,6 @@ import com.viser.StockTrade.dto.PurchasesItemDto;
 import com.viser.StockTrade.entity.Product;
 import com.viser.StockTrade.entity.Purchase;
 import com.viser.StockTrade.entity.PurchaseItem;
-import com.viser.StockTrade.exceptions.ExceptionHelper;
 import com.viser.StockTrade.exceptions.ValidationException;
 import com.viser.StockTrade.repository.PurchaseRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,13 +14,15 @@ import org.springframework.validation.BindingResult;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.viser.StockTrade.exceptions.ExceptionHelper.throwValidationException;
+
 @Service
 @RequiredArgsConstructor
 public class PurchaseService {
     private final PurchaseRepository repo;
     private final ProductService productService;
 
-    public void save(Purchase purchase){
+    public void save(Purchase purchase) {
         repo.save(purchase);
     }
 
@@ -29,12 +30,12 @@ public class PurchaseService {
         return repo.findAll();
     }
 
-    public Purchase getById(int id){
+    public Purchase getById(int id) {
         return repo.findById(id);
     }
 
     public void add(PurchaseDto purchaseDto, BindingResult result) throws ValidationException {
-        ExceptionHelper.throwValidationException(result, "/add-purchase-page");
+        throwValidationException(result, "/add-purchase-page");
         Purchase purchase = new Purchase();
         updatePurchaseFields(purchase, purchaseDto);
         updateQuantityInProduct(purchase.getPurchaseItems());
@@ -55,8 +56,8 @@ public class PurchaseService {
         return purchaseDto;
     }
 
-    private void updateQuantityInProduct(List<PurchaseItem> purchaseItems){
-        for(PurchaseItem purchaseItem : purchaseItems){
+    private void updateQuantityInProduct(List<PurchaseItem> purchaseItems) {
+        for (PurchaseItem purchaseItem : purchaseItems) {
             Product product = productService.getByName(purchaseItem.getProductName());
             product.setStockQuantity(product.getStockQuantity() + purchaseItem.getQuantity());
             productService.save(product);

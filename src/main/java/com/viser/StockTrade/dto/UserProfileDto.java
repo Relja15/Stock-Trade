@@ -3,7 +3,6 @@ package com.viser.StockTrade.dto;
 import com.viser.StockTrade.enums.Gender;
 import com.viser.StockTrade.validation.BasicValidation;
 import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;

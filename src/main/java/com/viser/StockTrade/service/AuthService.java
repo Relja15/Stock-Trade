@@ -3,14 +3,12 @@ package com.viser.StockTrade.service;
 import com.viser.StockTrade.dto.UserDto;
 import com.viser.StockTrade.entity.Role;
 import com.viser.StockTrade.entity.User;
-import com.viser.StockTrade.exceptions.ExceptionHelper;
 import com.viser.StockTrade.exceptions.NameExistException;
 import com.viser.StockTrade.exceptions.ValidationException;
 import com.viser.StockTrade.security.JwtGenerator;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,6 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import java.util.Collections;
+
+import static com.viser.StockTrade.exceptions.ExceptionHelper.throwNameExistException;
+import static com.viser.StockTrade.exceptions.ExceptionHelper.throwValidationException;
 
 @Service
 @RequiredArgsConstructor
@@ -49,10 +50,8 @@ public class AuthService {
     }
 
     public void register(UserDto userDto, BindingResult result) throws ValidationException, NameExistException {
-        ExceptionHelper.throwValidationException(result, "/add-user-page");
-        if (userService.existByUsername(userDto.getUsername())) {
-            throw new NameExistException("A user with this username already exists. Please choose a different username.", "/add-user-page");
-        }
+        throwValidationException(result, "/add-user-page");
+        throwNameExistException(userService.existByUsername(userDto.getUsername()), "A user with this username already exists. Please choose a different username.", "/add-user-page");
         User user = new User();
         setUserFields(user, userDto);
         userService.save(user);

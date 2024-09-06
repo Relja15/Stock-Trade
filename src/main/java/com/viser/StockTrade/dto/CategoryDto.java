@@ -1,8 +1,6 @@
 package com.viser.StockTrade.dto;
 
 import com.viser.StockTrade.validation.BasicValidation;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 

@@ -3,7 +3,6 @@ package com.viser.StockTrade.service;
 import com.viser.StockTrade.entity.Role;
 import com.viser.StockTrade.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service

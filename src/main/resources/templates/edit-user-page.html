@@ -46,8 +46,10 @@
             <li class="nav-item dropdown pe-3">
 
                 <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                    <img th:src="${userProfile.getProfilePictureUrl() != null ? userProfile.getProfilePictureUrl() : '/img/defaultProfileImg.png'}" alt="Profile" class="rounded-circle">
-                    <span class="d-none d-md-block dropdown-toggle ps-2" th:text="${userProfile.getFirstName() != null && userProfile.getLastName() != null ? userProfile.getFirstName() + ' ' + userProfile.getLastName().substring(0, 1) + '.' : username}"></span>
+                    <img th:src="${userProfile.getProfilePictureUrl() != null ? userProfile.getProfilePictureUrl() : '/img/defaultProfileImg.png'}"
+                         alt="Profile" class="rounded-circle">
+                    <span class="d-none d-md-block dropdown-toggle ps-2"
+                          th:text="${userProfile.getFirstName() != null && userProfile.getLastName() != null ? userProfile.getFirstName() + ' ' + userProfile.getLastName().substring(0, 1) + '.' : username}"></span>
                 </a><!-- End Profile Iamge Icon -->
 
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
@@ -166,16 +168,18 @@
 
             <div class="mb-3">
                 <label for="username" class="form-label">Username:</label>
-                <input type="text" id="username" name="username" class="form-control" th:value="${user.getUsername() != null ? user.getUsername() : ''}" th:placeholder="${user.getUsername() != null ? '' : 'Enter username'}" required/>
+                <input type="text" id="username" name="username" class="form-control"
+                       th:value="${user.getUsername() != null ? user.getUsername() : ''}"
+                       th:placeholder="${user.getUsername() != null ? '' : 'Enter username'}" required/>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password:</label>
-                <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required/>
+                <input type="password" id="password" name="password" class="form-control"
+                       placeholder="Enter your password" required/>
             </div>
             <button type="submit" class="btn btn-primary">Save Change</button>
         </form>
     </div>
-
 
 
 </main><!-- End #main -->

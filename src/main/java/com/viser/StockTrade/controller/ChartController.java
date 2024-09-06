@@ -1,7 +1,6 @@
 package com.viser.StockTrade.controller;
 
 import com.viser.StockTrade.service.ChartService;
-import com.viser.StockTrade.service.PurchaseItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +20,9 @@ public class ChartController {
     }
 
     @GetMapping("/purchase-supplier-data")
-    public Map<String, Long> getPurchaseBySupplier() { return chartService.chartPurschaseBySupplierData(); }
+    public Map<String, Long> getPurchaseBySupplier() {
+        return chartService.chartPurschaseBySupplierData();
+    }
 
     @GetMapping("/purchase-product-data")
     public Map<String, Long> getPurchasesByProduct() {

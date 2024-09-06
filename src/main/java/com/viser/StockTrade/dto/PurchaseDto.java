@@ -1,6 +1,5 @@
 package com.viser.StockTrade.dto;
 
-import com.viser.StockTrade.validation.BasicValidation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotEmpty;

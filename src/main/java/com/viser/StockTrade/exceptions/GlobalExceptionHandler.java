@@ -9,41 +9,41 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
-import java.net.BindException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(NameExistException.class)
-    public RedirectView handleNameExistException(NameExistException e, RedirectAttributes ra){
+    public RedirectView handleNameExistException(NameExistException e, RedirectAttributes ra) {
         ra.addFlashAttribute("error", e.getMessage());
         return new RedirectView(e.getRedirectUrl());
     }
 
     @ExceptionHandler(ForeignKeyConstraintViolationException.class)
-    public RedirectView handleForeignKeyConstraintViolationException(ForeignKeyConstraintViolationException e, RedirectAttributes ra){
+    public RedirectView handleForeignKeyConstraintViolationException(ForeignKeyConstraintViolationException e, RedirectAttributes ra) {
         ra.addFlashAttribute("error", e.getMessage());
         return new RedirectView(e.getRedirectUrl());
     }
 
     @ExceptionHandler(NotFoundException.class)
-    public RedirectView handleNotFoundException(NotFoundException e, RedirectAttributes ra){
+    public RedirectView handleNotFoundException(NotFoundException e, RedirectAttributes ra) {
         ra.addFlashAttribute("error", e.getMessage());
         return new RedirectView(e.getRedirectUrl());
     }
 
     @ExceptionHandler(IOException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public void handleIOException(IOException e){}
+    public void handleIOException(IOException e) {
+    }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public RedirectView handleBadCredentialsException(BadCredentialsException e, RedirectAttributes ra){
+    public RedirectView handleBadCredentialsException(BadCredentialsException e, RedirectAttributes ra) {
         ra.addFlashAttribute("error", "Invalid username or password.");
         return new RedirectView("/login-page");
     }
 
     @ExceptionHandler(ValidationException.class)
-    public RedirectView handleValidationException(ValidationException e, RedirectAttributes ra){
+    public RedirectView handleValidationException(ValidationException e, RedirectAttributes ra) {
         ra.addFlashAttribute("error", e.getMessage());
         return new RedirectView(e.getRedirectUrl());
     }

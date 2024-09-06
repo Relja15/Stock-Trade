@@ -9,12 +9,12 @@ import com.viser.StockTrade.service.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 @Controller
 @RequestMapping("/api/category")
@@ -30,7 +30,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public String delete(@PathVariable("id") Integer id, RedirectAttributes ra) throws NotFoundException, ForeignKeyConstraintViolationException, IOException {
+    public String delete(@PathVariable("id") Integer id, RedirectAttributes ra) throws NotFoundException, IOException, SQLIntegrityConstraintViolationException, ForeignKeyConstraintViolationException {
         categoryService.delete(id);
         ra.addFlashAttribute("success", "The category with id " + id + " has been deleted.");
         return "redirect:/category-page";

@@ -3,14 +3,11 @@ package com.viser.StockTrade.service;
 import com.viser.StockTrade.dto.UserDto;
 import com.viser.StockTrade.entity.User;
 import com.viser.StockTrade.entity.UserProfile;
-import com.viser.StockTrade.exceptions.ExceptionHelper;
 import com.viser.StockTrade.exceptions.NameExistException;
 import com.viser.StockTrade.exceptions.NotFoundException;
 import com.viser.StockTrade.exceptions.ValidationException;
 import com.viser.StockTrade.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -19,13 +16,13 @@ import org.springframework.validation.BindingResult;
 import java.io.IOException;
 import java.util.List;
 
+import static com.viser.StockTrade.exceptions.ExceptionHelper.*;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository repo;
-    @Lazy
-    @Autowired
-    private UserProfileService userProfileService;
+    private final UserProfileService userProfileService;
     private final PasswordEncoder passwordEncoder;
     private final FileService fileService;
 
@@ -41,8 +38,12 @@ public class UserService {
         repo.save(user);
     }
 
-    public void deleteById(int id){
+    public void deleteById(int id) {
         repo.deleteById(id);
+    }
+
+    public boolean existById(int id) {
+        return repo.existsById(id);
     }
 
     public User getByUsername(String username) {
@@ -65,9 +66,7 @@ public class UserService {
     }
 
     public void delete(int id) throws NotFoundException, IOException {
-        if (!repo.existsById(id)) {
-            throw new NotFoundException("Could not find any user with ID " + id, "/users-page");
-        }
+        throwNotFoundException(existById(id), "Could not find any user with ID " + id, "/users-page");
         UserProfile userProfile = userProfileService.getUserProfileByUserId(id);
         if (userProfile.getProfilePictureUrl() != null) {
             fileService.deleteFile(userProfile.getProfilePictureUrl());
@@ -76,17 +75,17 @@ public class UserService {
         deleteById(id);
     }
 
-    public void edit(int id, UserDto userDto, BindingResult result) throws ValidationException, NotFoundException, NameExistException{
-        ExceptionHelper.throwValidationException(result, "/edit-user-page/" + id);
+    public void edit(int id, UserDto userDto, BindingResult result) throws ValidationException, NotFoundException, NameExistException {
+        throwValidationException(result, "/edit-user-page/" + id);
         User user = repo.findById(id);
-        if (user == null) {
-            throw new NotFoundException("Could not find any user with ID " + id, "/edit-user-page/" + id);
-        }
-        if(!user.getUsername().equals(userDto.getUsername()) && existByUsername(userDto.getUsername())) {
-            throw new NameExistException("A user with this username already exists. Please choose a different username.", "/edit-user-page/" + id);
-        }
+        throwNotFoundException(user, "Could not find any user with ID " + id, "/edit-user-page/" + id);
+        throwNameExistException(isUsernameNameChangedAndExists(user, userDto), "A user with this username already exists. Please choose a different username.", "/edit-user-page/" + id);
         updateUserFields(user, userDto);
         save(user);
+    }
+
+    private boolean isUsernameNameChangedAndExists(User user, UserDto userDto) {
+        return !user.getUsername().equals(userDto.getUsername()) && existByUsername(userDto.getUsername());
     }
 
     private void updateUserFields(User user, UserDto userDto) {

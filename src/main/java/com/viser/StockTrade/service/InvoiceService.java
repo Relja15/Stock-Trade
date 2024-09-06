@@ -14,7 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,9 +59,9 @@ public class InvoiceService {
         return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
     }
 
-    private List<InvoiceDto> getInvoiceList(Purchase purchase){
+    private List<InvoiceDto> getInvoiceList(Purchase purchase) {
         List<InvoiceDto> invoiceDtos = new ArrayList<>();
-        for(PurchaseItem purchaseItem : purchase.getPurchaseItems()){
+        for (PurchaseItem purchaseItem : purchase.getPurchaseItems()) {
             InvoiceDto invoiceDto = new InvoiceDto();
             invoiceDto.setQuantity(purchaseItem.getQuantity());
             invoiceDto.setProduct(purchaseItem.getProductName());

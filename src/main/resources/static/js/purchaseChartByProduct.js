@@ -41,7 +41,7 @@ fetch('/api/charts/purchase-product-data')
                     },
                     tooltip: {
                         callbacks: {
-                            label: function(tooltipItem) {
+                            label: function (tooltipItem) {
                                 const value = tooltipItem.raw;
                                 const percentage = ((value / totalQuantity) * 100).toFixed(2);
                                 return `${tooltipItem.label}: ${value} (${percentage}%)`;
