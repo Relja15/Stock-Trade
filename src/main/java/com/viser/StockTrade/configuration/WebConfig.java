@@ -1,5 +1,6 @@
 package com.viser.StockTrade.configuration;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
@@ -14,10 +15,13 @@ public class WebConfig implements WebMvcConfigurer {
         return new HiddenHttpMethodFilter();
     }
 
+    @Value("${myapp.custom.upload-dir}")
+    private String UPLOAD_DIR;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:D:/New folder/Fax/FileSystem/uploads/");
+                .addResourceLocations("file:" + UPLOAD_DIR);
 
         registry.addResourceHandler("/static/**")
                 .addResourceLocations("classpath:/static/");
