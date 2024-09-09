@@ -27,6 +27,18 @@ public class InvoiceService {
     private final PurchaseService purchaseService;
     private final SupplierService supplierService;
 
+    /**
+     * Generates a PDF invoice for a given purchase and returns it in the response.
+     *
+     * This method retrieves the details of a purchase, including the supplier information and items,
+     * and uses JasperReports to generate a PDF invoice. The generated PDF is returned as a byte array
+     * in the response entity with appropriate headers to indicate it is a PDF file.
+     *
+     * @param id the ID of the purchase for which the invoice is to be generated (an {@link Integer})
+     * @return a {@link ResponseEntity} containing the PDF file as a byte array, with headers set for
+     *         inline display and content type as PDF
+     * @throws JRException if there is an error while generating the PDF report
+     */
     public ResponseEntity<byte[]> getPdf(int id) throws JRException {
         Purchase purchase = purchaseService.getById(id);
         Supplier supplier = supplierService.getByName(purchase.getSupplierName());
@@ -59,6 +71,16 @@ public class InvoiceService {
         return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
     }
 
+    /**
+     * Converts a list of purchase items associated with a purchase into a list of {@link InvoiceDto} objects.
+     *
+     * This method iterates through the purchase items, creating an {@link InvoiceDto} for each item.
+     * It sets the quantity, product name, unit price, and line total for each invoice item based on
+     * the details from the purchase items. The list of {@link InvoiceDto} objects is then returned.
+     *
+     * @param purchase the {@link Purchase} object containing the purchase items to be included in the invoice
+     * @return a {@link List} of {@link InvoiceDto} objects representing the items in the invoice
+     */
     private List<InvoiceDto> getInvoiceList(Purchase purchase) {
         List<InvoiceDto> invoiceDtos = new ArrayList<>();
         for (PurchaseItem purchaseItem : purchase.getPurchaseItems()) {

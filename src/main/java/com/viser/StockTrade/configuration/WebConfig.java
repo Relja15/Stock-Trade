@@ -18,6 +18,14 @@ public class WebConfig implements WebMvcConfigurer {
     @Value("${myapp.custom.upload-dir}")
     private String UPLOAD_DIR;
 
+    /**
+     * Configures resource handlers for the application.
+     *
+     * This method adds resource handlers that enable access to files located in the upload directory
+     * and static resources within the classpath.
+     *
+     * @param registry the {@link ResourceHandlerRegistry} object used to register resource handlers
+     */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/uploads/**")
